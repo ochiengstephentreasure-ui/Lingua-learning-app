@@ -746,9 +746,39 @@ def home():
     return send_from_directory(".", "index.html")
 
 
+# PWA/static assets are served explicitly so they work reliably under Gunicorn
+# on Render, regardless of Flask's static-folder configuration.
+@app.get("/manifest.json")
+def manifest():
+    return send_from_directory(".", "manifest.json", mimetype="application/manifest+json")
+
+
+@app.get("/icon.svg")
+def icon():
+    return send_from_directory(".", "icon.svg", mimetype="image/svg+xml")
+
+
+@app.get("/favicon.ico")
+def favicon():
+    # Browsers commonly request /favicon.ico even when the PWA manifest uses
+    # an SVG icon. Returning the SVG keeps the request successful without
+    # requiring a binary favicon file.
+    return send_from_directory(".", "icon.svg", mimetype="image/svg+xml")
+
+
+@app.get("/sw.js")
+def service_worker():
+    return send_from_directory(".", "sw.js", mimetype="application/javascript")
+
+
 @app.errorhandler(404)
 def page_not_found(error):
-    return send_from_directory(".", "404.html"), 404
+    # Never reference a missing 404.html: that can turn a normal 404 into a
+    # misleading 500. Return a small JSON response for API-style requests and
+    # the main app for browser navigation.
+    if request.path.startswith("/api/") or request.accept_mimetypes.best == "application/json":
+        return jsonify({"error": "Not found", "path": request.path}), 404
+    return send_from_directory(".", "index.html"), 404
 
 
 @app.get("/languages")
