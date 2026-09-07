@@ -858,15 +858,27 @@ def translate_endpoint():
     else:
         translation = online_translate(text, source, target)
 
+        # Render deployments do not have a translation provider unless the
+        # owner adds TRANSLATION_API_URL. Do not make the entire translator
+        # appear broken in that situation: fall back to Lingua's built-in
+        # phrasebook/dictionary for supported offline content.
+        if not translation:
+            translation = offline_translate(text, target, source)
+            if translation and translation.strip().lower() != text.strip().lower():
+                provider = "offline-fallback"
+            else:
+                translation = None
+
     if not translation:
         return jsonify({
-            "error": "The translation service is temporarily unavailable."
+            "error": "No online translation provider is configured or the phrase is not in Lingua's offline phrasebook yet. Enable Offline phrasebook for supported starter phrases, or configure TRANSLATION_API_URL on Render for full online translation."
         }), 503
 
     return jsonify({
         "translation": translation,
         "detected_source": "en" if source == "auto" else source,
         "provider": provider,
+        "offline_fallback": provider == "offline-fallback",
     })
 
 
