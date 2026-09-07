@@ -12,7 +12,7 @@ Lingua is a Flask-powered language-learning and translation app with a mobile-ap
 - XP, levels, streaks, activity history and vocabulary mastery.
 - Speaking studio using browser speech recognition when supported.
 - Pronunciation score is a speech-to-text similarity estimate, not a phoneme-level accent assessment.
-- Browser text-to-speech model playback.
+- Pronunciation engine: optional bundled/licensed course recordings first, then the best matching browser TTS voice, with a clear fallback message.
 - Translation can feed directly into vocabulary and speaking practice.
 - Dark mode and PWA install groundwork.
 
@@ -22,6 +22,8 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 Then open `http://127.0.0.1:5000`.
+
+For Render/production, use `gunicorn app:app` as the Start Command.
 
 ## Translation provider
 Set `TRANSLATION_API_URL` to a compatible translation POST endpoint. Optionally set `TRANSLATION_API_KEY`. The browser never receives the key.
@@ -34,6 +36,12 @@ Learning progress, vocabulary, settings and activity are stored locally in the b
 
 ## Expanded language support
 The translation backend accepts the expanded language list from the earlier Lingua version, while the built-in course curriculum currently focuses on Spanish, French, Kiswahili, German and Italian.
+
+## Pronunciation audio
+The V4 engine is ready for licensed course recordings. Add recordings under `audio/<language>/...` and register their paths in the `COURSE_AUDIO` map in `index.html`. If no recording exists, Lingua automatically falls back to browser TTS. No copyrighted recordings are bundled.
+
+## Course progression
+A1 is available immediately. A2 unlocks at 80% A1 mastery, B1 at 80% A2 mastery, and B2 at 80% B1 mastery. The learner can also choose an exact unit and phrase from the “Choose where to start” selector.
 
 ## PWA
 Serve Lingua over HTTPS when deploying publicly so browsers can offer installation as an app.
