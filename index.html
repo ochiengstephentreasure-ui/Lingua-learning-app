@@ -1551,27 +1551,27 @@ function createReverseTranslationQuestion(
 
   const available = [];
 
-  lessons.forEach(unit => {
+  lessons.forEach(lesson => {
 
-    const phrases = unit[1] || [];
+    const text = getLessonText(lesson.raw ?? lesson.text);
+    const english = getEnglishTranslation(
+      lang,
+      lesson.raw ?? lesson.text
+    );
 
-    phrases.forEach(phrase => {
+    if(text && english){
 
-      const text = getLessonText(phrase);
-      const english = getEnglishTranslation(lang, phrase);
+      available.push({
+        text,
+        english,
+        lang,
+        level,
+        unit: lesson.unit,
+        phrase: lesson.phrase,
+        title: lesson.title
+      });
 
-      if(text && english){
-
-        available.push({
-          text,
-          english,
-          lang,
-          level
-        });
-
-      }
-
-    });
+    }
 
   });
 
@@ -1582,22 +1582,116 @@ function createReverseTranslationQuestion(
   return available[
     Math.floor(Math.random() * available.length)
   ];
-} 
-  
-const $=id=>document.getElementById(id), key='lingua_full_v4';
-const fresh={lang:'es',level:'A1',xp:0,streak:0,lastStudy:'',todayMinutes:0,totalMinutes:0,goal:15,lessonProgress:{},vocab:{},activity:[],theme:'light',speakIndex:0};
-let state=load(), lastTranslation='', recognition=null, deferredInstall=null;
-function load(){try{return {...fresh,...JSON.parse(localStorage.getItem(key)||'{}')}}catch{return {...fresh}}}
-function save(){localStorage.setItem(key,JSON.stringify(state))}
+}
+/* =========================================================
+   SAFE STATE LOADING
+   Prevent old/unsupported levels from opening empty courses
+   ========================================================= */
+
+function load(){
+
+  let saved={};
+
+  try{
+    saved=JSON.parse(localStorage.getItem(key)||'{}') || {};
+  }catch{
+    saved={};
+  }
+
+  const merged={
+    ...fresh,
+    ...saved
+  };
+
+  /* Make sure the saved language exists */
+  if(!LANG[merged.lang]){
+    merged.lang='es';
+  }
+
+  /* Only use levels that currently exist for the language */
+  const availableLevels=Object.keys(
+    COURSES[merged.lang]?.units || {}
+  );
+
+  if(!availableLevels.includes(merged.level)){
+    merged.level=availableLevels.includes('A1')
+      ? 'A1'
+      : availableLevels[0] || 'A1';
+  }
+
+  /* Make sure important objects are valid */
+  if(!merged.lessonProgress || typeof merged.lessonProgress!=='object'){
+    merged.lessonProgress={};
+  }
+
+  if(!merged.vocab || typeof merged.vocab!=='object'){
+    merged.vocab={};
+  }
+
+  if(!Array.isArray(merged.activity)){
+    merged.activity=[];
+  }
+
+  return merged;
+}
+
+function save(){
+  localStorage.setItem(key,JSON.stringify(state));
+}
 function today(){return new Date().toISOString().slice(0,10)}
 function dayDiff(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
 function touchStudy(minutes,xp=5,label='Practice'){const d=today();if(state.lastStudy!==d){state.streak=state.lastStudy&&dayDiff(state.lastStudy,d)===1?state.streak+1:1;state.lastStudy=d;state.todayMinutes=0}state.todayMinutes=Math.min(state.goal,state.todayMinutes+minutes);state.totalMinutes+=minutes;state.xp+=xp;state.activity.unshift({label,at:Date.now(),xp});state.activity=state.activity.slice(0,12);save();renderAll()}
 function level(){return Math.max(1,Math.floor(state.xp/100)+1)}
-function allCourseLessons(lang=state.lang,lvl=state.level){return (COURSES[lang]?.units[lvl]||[]).flatMap((u,ui)=>u[1].map((p,pi)=>({unit:ui,phrase:pi,text:p,title:u[0]})))}
-function progressFor(lang=state.lang,lvl=state.level){const arr=allCourseLessons(lang,lvl);if(!arr.length)return 0;return Math.round(arr.reduce((n,x)=>n+(state.lessonProgress[`${lang}-${lvl}-${x.unit}-${x.phrase}`]||0),0)/(arr.length))}
-function mastery(){let keys=Object.keys(state.vocab);if(!keys.length)return 0;return Math.round(keys.reduce((n,k)=>n+Math.min(100,state.vocab[k].mastery||0),0)/(keys.length))}
+function allCourseLessons(lang=state.lang,lvl=state.level){
+
+  const units=COURSES[lang]?.units?.[lvl];
+
+  if(!Array.isArray(units)){
+    return [];
+  }
+
+  return units.flatMap((u,ui)=>{
+
+    const phrases=Array.isArray(u?.[1]) ? u[1] : [];
+
+    return phrases.map((p,pi)=>({
+
+      unit:ui,
+
+      phrase:pi,
+
+      text:getLessonText(p),
+
+      raw:p,
+
+      title:u?.[0] || `Unit ${ui+1}`
+
+    }));
+
+  });
+}
+function progressFor(lang=state.lang,lvl=state.level){
+
+  const arr=allCourseLessons(lang,lvl);
+
+  if(!arr.length){
+    return 0;
+  }
+
+  return Math.round(
+    arr.reduce((total,x)=>{
+
+      const key=`${lang}-${lvl}-${x.unit}-${x.phrase}`;
+
+      return total + Number(
+        state.lessonProgress?.[key] || 0
+      );
+
+    },0) / arr.length
+  );
+}
 function due(){return Object.values(state.vocab).filter(v=>!v.next||v.next<=Date.now()).length}
 function navigate(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.nav===id));window.scrollTo({top:0,behavior:'smooth'});renderAll()}
 function populateSelects(){const langs=Object.entries(LANG);$('courseLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('settingsLang').innerHTML=$('courseLang').innerHTML;$('courseLang').value=state.lang;$('settingsLang').value=state.lang;$('sourceLang').innerHTML='<option value="auto">Auto-detect</option>'+langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').value=state.lang;$('deckLevel').innerHTML=['A1','A2','B1','B2'].map(x=>`<option>${x}</option>`).join('');$('deckLevel').value=state.level;populateStartPoint()}
