@@ -29,14 +29,346 @@
 <div class="dialog" id="goalDialog"><div class="modal"><div class="row between"><h2>Daily goal</h2><button class="btn small" data-close>Close</button></div><p class="muted">Choose a realistic daily target.</p><div class="row" id="goalChoices2"></div></div></div><div class="toast" id="toast"></div>
 <script>
 'use strict';
-const LANG={es:'Spanish',fr:'French',sw:'Kiswahili',de:'German',it:'Italian'};
-const COURSES={
- es:{name:'Spanish',units:{A1:[['Unit 1 · Greetings',['Hola','¿Cómo estás?','Me llamo…']],['Unit 2 · People',['Mi familia','Este es mi amigo','Soy estudiante']],['Unit 3 · Everyday life',['Tengo que estudiar','Me gusta aprender','Hasta mañana']],['Unit 4 · Around town',['¿Dónde está…?','¿Cuánto cuesta?','Necesito ayuda']]],A2:[['Unit 1 · Past & plans',['Ayer fui a la escuela','Mañana voy a viajar','Ya he terminado']],['Unit 2 · Opinions',['Creo que sí','No estoy de acuerdo','En mi opinión']],['Unit 3 · Describing people',['Es muy amable','Tiene mucha experiencia','Trabaja conmigo']],['Unit 4 · Real conversations',['¿Puedes explicarlo?','Depende de la situación','¿Qué quieres decir?']]],B1:[['Unit 1 · Stories',['Cuando era pequeño…','El año pasado descubrí…','Me sorprendió mucho']],['Unit 2 · Discussions',['Por un lado…','Sin embargo…','La razón principal es…']],['Unit 3 · Work & study',['Estoy preparando un proyecto','Necesitamos una solución','Tengo una reunión']],['Unit 4 · Natural speech',['No pasa nada','Tiene sentido','Déjame pensarlo']]],B2:[['Unit 1 · Nuance',['Hasta cierto punto','No necesariamente','Es bastante probable']],['Unit 2 · Formal language',['Me gustaría señalar que…','Según los datos…','Agradezco su respuesta']],['Unit 3 · Debate',['Hay que tener en cuenta…','La evidencia sugiere…','No se puede ignorar…']],['Unit 4 · Fluency',['Dicho de otro modo…','En última instancia…','Desde mi punto de vista…']]]},descs:{A1:'Build a practical foundation for greetings, people and daily situations.',A2:'Move beyond basics with past events, opinions and longer conversations.',B1:'Develop independent communication through stories, discussion and work topics.',B2:'Refine nuance, formal communication, argument and fluent expression.'}},
- fr:{name:'French',units:{A1:[['Unité 1 · Salutations',['Bonjour','Comment ça va ?','Je m’appelle…']],['Unité 2 · Les personnes',['Ma famille','Voici mon ami','Je suis étudiant']],['Unité 3 · La vie quotidienne',['Je dois étudier','J’aime apprendre','À demain']],['Unité 4 · En ville',['Où est… ?','Combien ça coûte ?','J’ai besoin d’aide']]],A2:[['Unité 1 · Passé et projets',['Hier je suis allé à l’école','Demain je vais voyager','J’ai déjà terminé']],['Unité 2 · Opinions',['Je pense que oui','Je ne suis pas d’accord','À mon avis']],['Unité 3 · Décrire',['Il est très gentil','Elle a beaucoup d’expérience','Il travaille avec moi']],['Unité 4 · Conversation',['Pouvez-vous expliquer ?','Ça dépend de la situation','Qu’est-ce que vous voulez dire ?']]],B1:[['Unité 1 · Récits',['Quand j’étais petit…','L’année dernière, j’ai découvert…','Cela m’a beaucoup surpris']],['Unité 2 · Discussion',['D’un côté…','Cependant…','La raison principale est…']],['Unité 3 · Travail et études',['Je prépare un projet','Nous avons besoin d’une solution','J’ai une réunion']],['Unité 4 · Français naturel',['Ce n’est pas grave','Ça a du sens','Laisse-moi réfléchir']]],B2:[['Unité 1 · Nuance',['Dans une certaine mesure','Pas nécessairement','C’est assez probable']],['Unité 2 · Formel',['Je voudrais souligner que…','Selon les données…','Je vous remercie pour votre réponse']],['Unité 3 · Débat',['Il faut tenir compte de…','Les preuves suggèrent…','On ne peut pas ignorer…']],['Unité 4 · Aisance',['Autrement dit…','En fin de compte…','De mon point de vue…']]]},descs:{A1:'Build a practical foundation for greetings, people and daily situations.',A2:'Move beyond basics with past events, opinions and longer conversations.',B1:'Develop independent communication through stories, discussion and work topics.',B2:'Refine nuance, formal communication, argument and fluent expression.'}},
- sw:{name:'Kiswahili',units:{A1:[['Somo 1 · Salamu',['Habari','U hali gani?','Jina langu ni…']],['Somo 2 · Watu',['Familia yangu','Huyu ni rafiki yangu','Mimi ni mwanafunzi']],['Somo 3 · Kila siku',['Ninahitaji kusoma','Ninapenda kujifunza','Tutaonana kesho']],['Somo 4 · Mjini',['Iko wapi…?','Ni bei gani?','Nahitaji msaada']]],A2:[['Somo 1 · Jana na kesho',['Jana nilisoma','Kesho nitasafiri','Nimemaliza tayari']],['Somo 2 · Maoni',['Nadhani ndiyo','Sikubaliani','Kwa maoni yangu']],['Somo 3 · Maelezo',['Yeye ni mkarimu sana','Ana uzoefu mwingi','Anafanya kazi nami']],['Somo 4 · Mazungumzo',['Unaweza kueleza?','Inategemea hali','Unamaanisha nini?']]],B1:[['Somo 1 · Hadithi',['Nilipokuwa mdogo…','Mwaka jana niligundua…','Ilinishangaza sana']],['Somo 2 · Majadiliano',['Kwa upande mmoja…','Hata hivyo…','Sababu kuu ni…']],['Somo 3 · Kazi na masomo',['Ninaandaa mradi','Tunahitaji suluhisho','Nina mkutano']],['Somo 4 · Mazungumzo ya kawaida',['Hakuna shida','Ina maana','Acha nifikirie']]],B2:[['Somo 1 · Maana fiche',['Kwa kiwango fulani','Si lazima','Inawezekana sana']],['Somo 2 · Lugha rasmi',['Ningependa kusisitiza kwamba…','Kulingana na data…','Ninashukuru jibu lako']],['Somo 3 · Mjadala',['Tunapaswa kuzingatia…','Ushahidi unaonyesha…','Hatuwezi kupuuza…']],['Somo 4 · Ufasaha',['Kwa maneno mengine…','Hatimaye…','Kwa mtazamo wangu…']]]},descs:{A1:'Build a practical foundation for greetings, people and daily situations.',A2:'Move beyond basics with past events, opinions and longer conversations.',B1:'Develop independent communication through stories, discussion and work topics.',B2:'Refine nuance, formal communication, argument and fluent expression.'}},
- de:{name:'German',units:{A1:[['Lektion 1 · Begrüßungen',['Hallo','Wie geht es dir?','Ich heiße…']],['Lektion 2 · Menschen',['Meine Familie','Das ist mein Freund','Ich bin Schüler']],['Lektion 3 · Alltag',['Ich muss lernen','Ich lerne gern','Bis morgen']],['Lektion 4 · In der Stadt',['Wo ist…?','Wie viel kostet das?','Ich brauche Hilfe']]],A2:[['Lektion 1 · Vergangenheit und Pläne',['Gestern war ich in der Schule','Morgen werde ich reisen','Ich bin schon fertig']],['Lektion 2 · Meinungen',['Ich glaube schon','Ich bin nicht einverstanden','Meiner Meinung nach']],['Lektion 3 · Beschreiben',['Er ist sehr freundlich','Sie hat viel Erfahrung','Er arbeitet mit mir']],['Lektion 4 · Gespräche',['Kannst du das erklären?','Das hängt von der Situation ab','Was meinst du?']]],B1:[['Lektion 1 · Geschichten',['Als ich klein war…','Letztes Jahr entdeckte ich…','Das hat mich sehr überrascht']],['Lektion 2 · Diskussionen',['Einerseits…','Allerdings…','Der Hauptgrund ist…']],['Lektion 3 · Arbeit und Studium',['Ich bereite ein Projekt vor','Wir brauchen eine Lösung','Ich habe eine Besprechung']],['Lektion 4 · Natürlich sprechen',['Kein Problem','Das ergibt Sinn','Lass mich darüber nachdenken']]],B2:[['Lektion 1 · Nuancen',['Bis zu einem gewissen Grad','Nicht unbedingt','Das ist ziemlich wahrscheinlich']],['Lektion 2 · Formell',['Ich möchte betonen, dass…','Laut den Daten…','Vielen Dank für Ihre Antwort']],['Lektion 3 · Debatte',['Man muss berücksichtigen…','Die Beweise deuten darauf hin…','Das kann man nicht ignorieren']],['Lektion 4 · Flüssigkeit',['Anders gesagt…','Letztendlich…','Aus meiner Sicht…']]]},descs:{A1:'Build a practical foundation for greetings, people and daily situations.',A2:'Move beyond basics with past events, opinions and longer conversations.',B1:'Develop independent communication through stories, discussion and work topics.',B2:'Refine nuance, formal communication, argument and fluent expression.'}},
- it:{name:'Italian',units:{A1:[['Unità 1 · Saluti',['Ciao','Come stai?','Mi chiamo…']],['Unità 2 · Persone',['La mia famiglia','Questo è il mio amico','Sono studente']],['Unità 3 · Ogni giorno',['Devo studiare','Mi piace imparare','A domani']],['Unità 4 · In città',['Dov’è…?','Quanto costa?','Ho bisogno di aiuto']]],A2:[['Unità 1 · Passato e progetti',['Ieri sono andato a scuola','Domani viaggerò','Ho già finito']],['Unità 2 · Opinioni',['Penso di sì','Non sono d’accordo','Secondo me']],['Unità 3 · Descrivere',['È molto gentile','Ha molta esperienza','Lavora con me']],['Unità 4 · Conversazione',['Puoi spiegarlo?','Dipende dalla situazione','Cosa vuoi dire?']]],B1:[['Unità 1 · Racconti',['Quando ero piccolo…','L’anno scorso ho scoperto…','Mi ha sorpreso molto']],['Unità 2 · Discussioni',['Da un lato…','Tuttavia…','Il motivo principale è…']],['Unità 3 · Lavoro e studio',['Sto preparando un progetto','Abbiamo bisogno di una soluzione','Ho una riunione']],['Unità 4 · Parlare naturalmente',['Non fa niente','Ha senso','Fammi pensare']]],B2:[['Unità 1 · Sfumature',['Fino a un certo punto','Non necessariamente','È abbastanza probabile']],['Unità 2 · Formale',['Vorrei sottolineare che…','Secondo i dati…','La ringrazio per la risposta']],['Unità 3 · Dibattito',['Bisogna tenere conto di…','Le prove suggeriscono…','Non si può ignorare…']],['Unità 4 · Fluidità',['In altre parole…','In ultima analisi…','Dal mio punto di vista…']]]},descs:{A1:'Build a practical foundation for greetings, people and daily situations.',A2:'Move beyond basics with past events, opinions and longer conversations.',B1:'Develop independent communication through stories, discussion and work topics.',B2:'Refine nuance, formal communication, argument and fluent expression.'}}
+const LANG={
+  es:'Spanish',
+  fr:'French',
+  sw:'Kiswahili',
+  de:'German',
+  it:'Italian',
+  lg:'Luganda',
+  ach:'Acholi',
+  luo:'Luo',
+  rw:'Kinyarwanda',
+  pt:'Portuguese',
+  ar:'Arabic',
+  hi:'Hindi',
+  zh:'Chinese (Mandarin)',
+  ja:'Japanese',
+  ko:'Korean'
 };
+Object.assign(COURSES, {
+
+  lg:{
+    name:'Luganda',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Gyebale ko!',
+          'Oli otya?',
+          'Ndi bulungi, webale.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Erinnya lyo ggwe ani?',
+          'Erinnya lyange nze…',
+          'Nsanyuse okukulaba.'
+        ]],
+        ['Unit 3 · Everyday life',[
+          'Webale nyo.',
+          'Mwattu.',
+          'Nsonyiwa.'
+        ]],
+        ['Unit 4 · Places & help',[
+          'Ova wa?',
+          'Ova wa?',
+          'Nnyamba!'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Learn practical Luganda for greetings, introductions and everyday situations.',
+      A2:'Continue building everyday Luganda conversations.'
+    }
+  },
+
+  ach:{
+    name:'Acholi',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Itye nining?',
+          'Atye maber.',
+          'Kono in?'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Nyingi anga?',
+          'Nyinga kilwongo ni…',
+          'Eni obedo…'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Apwoyo.',
+          'Apwoyo matek.',
+          'Tima kica.'
+        ]],
+        ['Unit 4 · Help & places',[
+          'Atwero konyi?',
+          'Atwero ceto nining…?',
+          'Gang pa… tye kwene?'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical foundation in Acholi greetings, introductions and everyday communication.',
+      A2:'Develop longer conversations and everyday Acholi vocabulary.'
+    }
+  },
+
+  luo:{
+    name:'Luo',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Misawa!',
+          'Idhi nade?',
+          'Adhi maber.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Nyingi ng’a?',
+          'Nyinga en…',
+          'Amor neni.'
+        ]],
+        ['Unit 3 · Everyday life',[
+          'Erokamano.',
+          'Adwaro pi.',
+          'Riyo deya.'
+        ]],
+        ['Unit 4 · Places & actions',[
+          'Bi.',
+          'Dhiyo.',
+          'Kony!'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Learn practical Luo for greetings, introductions and everyday situations.',
+      A2:'Expand your Luo conversations and everyday vocabulary.'
+    }
+  },
+
+  rw:{
+    name:'Kinyarwanda',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Muraho.',
+          'Amakuru?',
+          'Ni meza.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Witwa nde?',
+          'Nitwa…',
+          'Nishimiye kukumenya.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Murakoze.',
+          'Ndakwinginze.',
+          'Mbabarira.'
+        ]],
+        ['Unit 4 · Help & places',[
+          'Mumfashe!',
+          'Ubwiherero buri he?',
+          'Sinumva.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical foundation in Kinyarwanda greetings, introductions and daily situations.',
+      A2:'Develop more confident Kinyarwanda conversations.'
+    }
+  },
+
+  pt:{
+    name:'Portuguese',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Olá!',
+          'Tudo bem?',
+          'Estou bem, obrigado.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Como se chama?',
+          'Meu nome é…',
+          'Prazer em conhecer você.'
+        ]],
+        ['Unit 3 · Everyday life',[
+          'Muito obrigado.',
+          'Por favor.',
+          'Desculpe.'
+        ]],
+        ['Unit 4 · Around town',[
+          'Onde fica o banheiro?',
+          'Quanto custa?',
+          'Preciso de ajuda.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Portuguese foundation for greetings, introductions and daily situations.',
+      A2:'Move into longer Portuguese conversations and everyday topics.'
+    }
+  },
+
+  ar:{
+    name:'Arabic',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'مرحبًا',
+          'كيف حالك؟',
+          'أنا بخير، شكرًا.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'ما اسمك؟',
+          'اسمي…',
+          'تشرفت بلقائك.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'شكرًا جزيلاً.',
+          'من فضلك.',
+          'آسف.'
+        ]],
+        ['Unit 4 · Around town',[
+          'أين الحمام؟',
+          'كم السعر؟',
+          'أحتاج إلى مساعدة.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Learn practical Arabic for greetings, introductions and everyday situations.',
+      A2:'Develop longer conversations and everyday Arabic vocabulary.'
+    }
+  },
+
+  hi:{
+    name:'Hindi',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'नमस्ते!',
+          'आप कैसे हैं?',
+          'मैं ठीक हूँ, धन्यवाद।'
+        ]],
+        ['Unit 2 · Introductions',[
+          'आपका नाम क्या है?',
+          'मेरा नाम … है।',
+          'आपसे मिलकर खुशी हुई।'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'बहुत धन्यवाद।',
+          'कृपया।',
+          'माफ़ कीजिए।'
+        ]],
+        ['Unit 4 · Around town',[
+          'बाथरूम कहाँ है?',
+          'यह कितने का है?',
+          'मुझे मदद चाहिए।'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Hindi foundation for greetings, introductions and daily situations.',
+      A2:'Develop longer Hindi conversations and everyday vocabulary.'
+    }
+  },
+
+  zh:{
+    name:'Chinese (Mandarin)',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          '你好！',
+          '你好吗？',
+          '我很好，谢谢。'
+        ]],
+        ['Unit 2 · Introductions',[
+          '你叫什么名字？',
+          '我叫……',
+          '很高兴认识你。'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          '谢谢。',
+          '请。',
+          '对不起。'
+        ]],
+        ['Unit 4 · Around town',[
+          '洗手间在哪里？',
+          '多少钱？',
+          '我需要帮助。'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Mandarin foundation for greetings, introductions and daily situations.',
+      A2:'Develop longer Mandarin conversations and everyday vocabulary.'
+    }
+  },
+
+  ja:{
+    name:'Japanese',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'こんにちは。',
+          'お元気ですか？',
+          '元気です。ありがとうございます。'
+        ]],
+        ['Unit 2 · Introductions',[
+          'お名前は何ですか？',
+          '私の名前は…です。',
+          'はじめまして。'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'ありがとうございます。',
+          'お願いします。',
+          'すみません。'
+        ]],
+        ['Unit 4 · Around town',[
+          'トイレはどこですか？',
+          'いくらですか？',
+          '助けてください。'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Japanese foundation for greetings, introductions and daily situations.',
+      A2:'Develop longer Japanese conversations and everyday vocabulary.'
+    }
+  },
+
+  ko:{
+    name:'Korean',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          '안녕하세요!',
+          '잘 지내세요?',
+          '네, 잘 지내요. 감사합니다.'
+        ]],
+        ['Unit 2 · Introductions',[
+          '이름이 뭐예요?',
+          '제 이름은 …예요.',
+          '만나서 반가워요.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          '감사합니다.',
+          '부탁합니다.',
+          '죄송합니다.'
+        ]],
+        ['Unit 4 · Around town',[
+          '화장실이 어디예요?',
+          '얼마예요?',
+          '도와주세요.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Korean foundation for greetings, introductions and daily situations.',
+      A2:'Develop longer Korean conversations and everyday vocabulary.'
+    }
+  }
+
+});
 const $=id=>document.getElementById(id), key='lingua_full_v4';
 const fresh={lang:'es',level:'A1',xp:0,streak:0,lastStudy:'',todayMinutes:0,totalMinutes:0,goal:15,lessonProgress:{},vocab:{},activity:[],theme:'light',speakIndex:0};
 let state=load(), lastTranslation='', recognition=null, deferredInstall=null;
@@ -56,7 +388,13 @@ function navigate(id){document.querySelectorAll('.view').forEach(v=>v.classList.
 function populateSelects(){const langs=Object.entries(LANG);$('courseLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('settingsLang').innerHTML=$('courseLang').innerHTML;$('courseLang').value=state.lang;$('settingsLang').value=state.lang;$('sourceLang').innerHTML='<option value="auto">Auto-detect</option>'+langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').value=state.lang;$('deckLevel').innerHTML=['A1','A2','B1','B2'].map(x=>`<option>${x}</option>`).join('');$('deckLevel').value=state.level;populateStartPoint()}
 function populateStartPoint(){const c=COURSES[state.lang];const lvl=state.level;const units=c?.units?.[lvl]||[];const sel=$('startPoint');if(!sel)return;sel.innerHTML=units.flatMap((u,ui)=>u[1].map((text,pi)=>`<option value="${ui}:${pi}">Unit ${ui+1} · ${esc(u[0])} · Phrase ${pi+1}</option>`)).join('');const first=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);sel.value=first?`${first.unit}:${first.phrase}`:'0:0'}
 function renderHome(){const pct=Math.round(state.todayMinutes/state.goal*100);$('streak').textContent=state.streak;$('xp').textContent=state.xp;$('level').textContent=level();$('mastery').textContent=mastery()+'%';$('goalPct').textContent=pct+'%';$('goalBar').style.width=Math.min(100,pct)+'%';$('ring').style.setProperty('--pct',Math.min(100,pct));$('goalText').textContent=`${state.goal} minutes today`;$('goalProgress').textContent=`${state.todayMinutes} / ${state.goal} minutes`;$('todayReview').textContent=`${due()} cards due`;const next=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);$('todayLesson').textContent=next?.title||'Level complete 🎉';$('todayLessonMeta').textContent=next?next.text:'Choose the next level to continue';$('todayLessonBtn').textContent=next?'Start':'Choose level';$('todayLessonBtn').onclick=()=>next?openLesson(next.unit):navigate('learn');$('courseCards').innerHTML=Object.entries(LANG).map(([k,n])=>{const p=progressFor(k,state.level);return `<article class="card course-card"><span class="badge">${state.level}</span><h3>${n}</h3><p class="muted">${COURSES[k].descs[state.level]}</p><div class="progress"><i style="width:${p}%"></i></div><p class="muted">${p}% level progress</p><button class="btn small ${k===state.lang?'primary':''}" data-course="${k}">${k===state.lang?'Continue':'Study'}</button></article>`}).join('');document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.course;save();populateSelects();navigate('learn')});$('activity').innerHTML=state.activity.length?state.activity.slice(0,6).map(a=>`<div class="lessonrow"><div class="grow"><b>${esc(a.label)}</b><div class="muted" style="font-size:12px">${new Date(a.at).toLocaleString()}</div></div><span class="pill">+${a.xp} XP</span></div>`).join(''):'<div class="empty">Complete a lesson, review a card or practise speaking to see your activity here.</div>'}
-function levelUnlocked(level){if(level==='A1')return true;const prev={A2:'A1',B1:'A2',B2:'B1'}[level];return progressFor(prev)>=80}
+function levelUnlocked(level){
+  if(!COURSES[state.lang]?.units?.[level]) return false;
+  if(level==='A1') return true;
+
+  const prev={A2:'A1',B1:'A2',B2:'B1'}[level];
+  return progressFor(state.lang,prev)>=80;
+}
 function configureLevelOptions(){const sel=$('courseLevel');if(!sel)return;Array.from(sel.options).forEach(o=>{o.disabled=!levelUnlocked(o.value);o.textContent=levelUnlocked(o.value)?o.value:`${o.value} 🔒`;});if(!levelUnlocked(sel.value)){sel.value=['A1','A2','B1','B2'].filter(levelUnlocked).pop()||'A1';state.level=sel.value;save();}}
 function renderLearn(){state.lang=$('courseLang').value||state.lang;configureLevelOptions();state.level=$('courseLevel').value||state.level;const c=COURSES[state.lang],p=progressFor();$('courseName').textContent=c.name;$('courseDescription').textContent=c.descs[state.level];$('courseBadge').textContent=state.level+' · '+({A1:'Beginner',A2:'Elementary',B1:'Intermediate',B2:'Upper intermediate'}[state.level]);$('levelMastery').textContent=p+'%';$('levelBar').style.width=p+'%';const units=c.units[state.level]||[];$('coursePath').innerHTML=units.map((u,ui)=>`<article class="unit"><div class="unithead"><div class="unitnum">${ui+1}</div><div class="unitgrow"><b>${esc(u[0])}</b><div class="muted">${u[1].length} core phrases</div></div></div>${u[1].map((text,pi)=>{const q=state.lessonProgress[`${state.lang}-${state.level}-${ui}-${pi}`]||0;return `<div class="lessonrow"><div class="grow"><b>${esc(text)}</b><div class="progress" style="margin-top:7px"><i style="width:${q}%"></i></div></div><span class="muted">${q}%</span><button class="btn small" data-openlesson="${ui}" data-startphrase="${pi}">${q?'Review':'Start'}</button></div>`}).join('')}</article>`).join('');document.querySelectorAll('[data-openlesson]').forEach(b=>b.onclick=()=>openLesson(+b.dataset.openlesson,+b.dataset.startphrase||0));populateStartPoint();$('startNext').onclick=()=>{const x=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);if(x)openLesson(x.unit,x.phrase);else toast('Level complete — choose another level above.')};$('startChosen').onclick=()=>{const v=$('startPoint').value.split(':').map(Number);openLesson(Number.isFinite(v[0])?v[0]:0,Number.isFinite(v[1])?v[1]:0)};$('courseLevel').value=state.level;save()}
 function lessonQuizOptions(correct,lang){const pool=allCourseLessons(lang,state.level).map(x=>x.text).filter(x=>x!==correct);return [correct,...pool.sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5)}
