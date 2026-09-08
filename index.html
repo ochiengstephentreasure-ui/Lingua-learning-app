@@ -1736,8 +1736,44 @@ function populateSelects(){
 
   populateStartPoint();
 }
-function populateStartPoint(){const c=COURSES[state.lang];const lvl=state.level;const units=c?.units?.[lvl]||[];const sel=$('startPoint');if(!sel)return;sel.innerHTML=units.flatMap((u,ui)=>u[1].map((text,pi)=>`<option value="${ui}:${pi}">Unit ${ui+1} · ${esc(u[0])} · Phrase ${pi+1}</option>`)).join('');const first=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);sel.value=first?`${first.unit}:${first.phrase}`:'0:0'}
-function renderHome(){const pct=Math.round(state.todayMinutes/state.goal*100);$('streak').textContent=state.streak;$('xp').textContent=state.xp;$('level').textContent=level();$('mastery').textContent=mastery()+'%';$('goalPct').textContent=pct+'%';$('goalBar').style.width=Math.min(100,pct)+'%';$('ring').style.setProperty('--pct',Math.min(100,pct));$('goalText').textContent=`${state.goal} minutes today`;$('goalProgress').textContent=`${state.todayMinutes} / ${state.goal} minutes`;$('todayReview').textContent=`${due()} cards due`;const next=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);$('todayLesson').textContent=next?.title||'Level complete 🎉';$('todayLessonMeta').textContent=next?next.text:'Choose the next level to continue';$('todayLessonBtn').textContent=next?'Start':'Choose level';$('todayLessonBtn').onclick=()=>next?openLesson(next.unit):navigate('learn');$('courseCards').innerHTML=Object.entries(LANG).map(([k,n])=>{const p=progressFor(k,state.level);return `<article class="card course-card"><span class="badge">${state.level}</span><h3>${n}</h3><p class="muted">${esc(
+function populateStartPoint(){
+  const c=COURSES[state.lang];
+  const lvl=state.level;
+  const units=c?.units?.[lvl]||[];
+  const sel=$('startPoint');
+
+  if(!sel)return;
+
+  sel.innerHTML=units.flatMap((u,ui)=>{
+    const phrases=Array.isArray(u?.[1]) ? u[1] : [];
+    const title=u?.[0] || `Unit ${ui+1}`;
+
+    return phrases.map((phrase,pi)=>{
+      const text=getLessonText(phrase);
+
+      return `
+        <option value="${ui}:${pi}">
+          Unit ${ui+1} · ${esc(title)} · Phrase ${pi+1}
+          ${text ? ` · ${esc(text)}` : ''}
+        </option>
+      `;
+    });
+  }).join('');
+
+  const first=allCourseLessons(state.lang,state.level).find(x=>{
+    const key=`${state.lang}-${state.level}-${x.unit}-${x.phrase}`;
+    return Number(state.lessonProgress?.[key]||0)<100;
+  });
+
+  if(first){
+    sel.value=`${first.unit}:${first.phrase}`;
+  }else if(sel.options.length){
+    sel.value=sel.options[0].value;
+  }
+}
+function renderHome(){const pct=Math.round(state.todayMinutes/state.goal*100);$('streak').textContent=state.streak;$('xp').textContent=state.xp;$('level').textContent=level();$('mastery').textContent=mastery()+'%';$('goalPct').textContent=pct+'%';$('goalBar').style.width=Math.min(100,pct)+'%';$('ring').style.setProperty('--pct',Math.min(100,pct));$('goalText').textContent=`${state.goal} minutes today`;$('goalProgress').textContent=`${state.todayMinutes} / ${state.goal} minutes`;$('todayReview').textContent=`${due()} cards due`;const next=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);$('todayLesson').textContent=next?.title||'Level complete 🎉';$('todayLessonMeta').textContent=next?next.text:'Choose the next level to continue';$('todayLessonBtn').textContent=next?'Start':'Choose level';$('todayLessonBtn').onclick=()=>next
+  ? openLesson(next.unit,next.phrase)
+  : navigate('learn');$('courseCards').innerHTML=Object.entries(LANG).map(([k,n])=>{const p=progressFor(k,state.level);return `<article class="card course-card"><span class="badge">${state.level}</span><h3>${n}</h3><p class="muted">${esc(
   COURSES[k]?.descs?.[state.level] ||
   `Continue learning ${n}.`
 )}</p><div class="progress"><i style="width:${p}%"></i></div><p class="muted">${p}% level progress</p><button class="btn small ${k===state.lang?'primary':''}" data-course="${k}">${k===state.lang?'Continue':'Study'}</button></article>`}).join('');document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.course;save();populateSelects();navigate('learn')});$('activity').innerHTML=state.activity.length?state.activity.slice(0,6).map(a=>`<div class="lessonrow"><div class="grow"><b>${esc(a.label)}</b><div class="muted" style="font-size:12px">${new Date(a.at).toLocaleString()}</div></div><span class="pill">+${a.xp} XP</span></div>`).join(''):'<div class="empty">Complete a lesson, review a card or practise speaking to see your activity here.</div>'}
@@ -1984,9 +2020,300 @@ function renderLearn(){
 
   save();
 }
-function lessonQuizOptions(correct,lang){const pool=allCourseLessons(lang,state.level).map(x=>x.text).filter(x=>x!==correct);return [correct,...pool.sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5)}
-function openLesson(ui,startPhrase=0){const lang=state.lang,lvl=state.level,u=COURSES[lang].units[lvl][ui];if(!u)return;let i=Math.max(0,Math.min(startPhrase,u[1].length-1)),correctCount=0;const visited=new Set();$('lessonTitle').textContent=u[0];$('lessonBadge').textContent=`${lvl} · Unit ${ui+1}`;$('lessonDialog').classList.add('open');function step(){const text=u[1][i];$('lessonBody').innerHTML=`<div class="lessonbox"><p class="muted">Learn the phrase, hear it, then choose the meaning that best fits.</p><div class="card" style="margin-top:15px;background:var(--bg)"><span class="badge">Phrase ${i+1} / ${u[1].length}</span><div class="lessonphrase">${esc(text)}</div><div class="speak-row"><button class="btn" id="lessonSpeak">🔊 Listen</button><button class="btn" id="lessonSpeakSlow">🐢 Slow</button></div><div class="voice-note" id="lessonVoiceStatus"></div></div><div style="margin-top:18px"><b>Quick check</b><div id="lessonChoices"></div><div class="status" id="lessonStatus"></div></div></div>`;$('lessonSpeak').onclick=()=>playPronunciation(text,lang,0.88,audioKeyFor(lang,lvl,ui,i),$('lessonVoiceStatus'));$('lessonSpeakSlow').onclick=()=>playPronunciation(text,lang,0.65,audioKeyFor(lang,lvl,ui,i),$('lessonVoiceStatus'));$('lessonVoiceStatus').textContent=voiceMessage(lang);const opts=lessonQuizOptions(text,lang);$('lessonChoices').innerHTML=opts.map(o=>`<button class="btn choice" data-answer="${esc(o)}">${esc(o)}</button>`).join('');document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-answer]').forEach(x=>x.disabled=true);const ok=b.dataset.answer===text;b.classList.add(ok?'correct':'wrong');if(ok)correctCount++;visited.add(i);$('lessonStatus').textContent=ok?'Correct!':'Keep going — the phrase itself is the target.';const id=`${lang}-${lvl}-${ui}-${i}`;state.lessonProgress[id]=ok?100:60;save();setTimeout(()=>{if(i<u[1].length-1){i++;step()}else{visited.forEach(pi=>{const k=`${lang}-${lvl}-${ui}-${pi}`;state.lessonProgress[k]=100;const p=u[1][pi];state.vocab[p] ||= {word:p,meaning:`${COURSES[lang].name} lesson phrase`,lang,next:Date.now(),mastery:10,interval:0};});save();touchStudy(Math.max(2,visited.size),15+correctCount*3,`Completed ${u[0]}`);close('lessonDialog');toast(`Lesson complete · +${15+correctCount*3} XP`)}} ,650)})}step()}
-function vocabData(){return Object.values(state.vocab).filter(v=>v.lang===state.lang)}
+function lessonQuizOptions(correct,lang){
+  const pool=allCourseLessons(lang,state.level)
+    .map(x=>x.text)
+    .filter(x=>x && x!==correct);
+
+  const shuffled=[...pool].sort(()=>Math.random()-.5);
+
+  return [
+    correct,
+    ...shuffled.slice(0,2)
+  ].sort(()=>Math.random()-.5);
+}
+function openLesson(ui,startPhrase=0){
+
+  const lang=state.lang;
+  const lvl=state.level;
+
+  const course=COURSES[lang];
+
+  if(!course){
+    console.error('Lingua: course not found:',lang);
+    toast('This language course is unavailable.');
+    return;
+  }
+
+  const units=course.units?.[lvl];
+
+  if(!Array.isArray(units)){
+    console.error('Lingua: level has no units:',lang,lvl);
+    toast(`No ${lvl} lessons are available yet.`);
+    return;
+  }
+
+  const u=units[ui];
+
+  if(!u){
+    console.error('Lingua: unit not found:',{
+      lang,
+      level:lvl,
+      unit:ui
+    });
+
+    toast('That lesson could not be opened.');
+    return;
+  }
+
+  const phrases=Array.isArray(u[1]) ? u[1] : [];
+
+  if(!phrases.length){
+    toast('This lesson does not contain any phrases yet.');
+    return;
+  }
+
+  let i=Math.max(
+    0,
+    Math.min(
+      Number(startPhrase)||0,
+      phrases.length-1
+    )
+  );
+
+  let correctCount=0;
+
+  const visited=new Set();
+
+  $('lessonTitle').textContent=
+    u[0] || `Unit ${ui+1}`;
+
+  $('lessonBadge').textContent=
+    `${lvl} · Unit ${ui+1}`;
+
+  $('lessonDialog').classList.add('open');
+
+  function step(){
+
+    const rawPhrase=phrases[i];
+
+    const text=getLessonText(rawPhrase);
+
+    if(!text){
+      console.warn(
+        'Lingua: empty lesson phrase',
+        {lang,lvl,ui,i}
+      );
+
+      visited.add(i);
+
+      if(i<phrases.length-1){
+        i++;
+        step();
+      }else{
+        close('lessonDialog');
+        toast('Lesson completed.');
+      }
+
+      return;
+    }
+
+    $('lessonBody').innerHTML=`
+      <div class="lessonbox">
+
+        <p class="muted">
+          Learn the phrase, hear it, then choose the meaning that best fits.
+        </p>
+
+        <div
+          class="card"
+          style="margin-top:15px;background:var(--bg)"
+        >
+
+          <span class="badge">
+            Phrase ${i+1} / ${phrases.length}
+          </span>
+
+          <div class="lessonphrase">
+            ${esc(text)}
+          </div>
+
+          <div class="speak-row">
+            <button class="btn" id="lessonSpeak">
+              🔊 Listen
+            </button>
+
+            <button class="btn" id="lessonSpeakSlow">
+              🐢 Slow
+            </button>
+          </div>
+
+          <div
+            class="voice-note"
+            id="lessonVoiceStatus"
+          ></div>
+
+        </div>
+
+        <div style="margin-top:18px">
+
+          <b>Quick check</b>
+
+          <div id="lessonChoices"></div>
+
+          <div
+            class="status"
+            id="lessonStatus"
+          ></div>
+
+        </div>
+
+      </div>
+    `;
+
+    const audioKey=
+      audioKeyFor(lang,lvl,ui,i);
+
+    $('lessonSpeak').onclick=()=>{
+      playPronunciation(
+        text,
+        lang,
+        0.88,
+        audioKey,
+        $('lessonVoiceStatus')
+      );
+    };
+
+    $('lessonSpeakSlow').onclick=()=>{
+      playPronunciation(
+        text,
+        lang,
+        0.65,
+        audioKey,
+        $('lessonVoiceStatus')
+      );
+    };
+
+    $('lessonVoiceStatus').textContent=
+      voiceMessage(lang);
+
+    const opts=
+      lessonQuizOptions(text,lang);
+
+    $('lessonChoices').innerHTML=
+      opts.map(o=>`
+        <button
+          class="btn choice"
+          data-answer="${esc(o)}"
+        >
+          ${esc(o)}
+        </button>
+      `).join('');
+
+    document
+      .querySelectorAll('[data-answer]')
+      .forEach(button=>{
+
+        button.onclick=()=>{
+
+          document
+            .querySelectorAll('[data-answer]')
+            .forEach(x=>{
+              x.disabled=true;
+            });
+
+          const ok=
+            button.dataset.answer===text;
+
+          button.classList.add(
+            ok ? 'correct' : 'wrong'
+          );
+
+          if(ok){
+            correctCount++;
+          }
+
+          visited.add(i);
+
+          $('lessonStatus').textContent=
+            ok
+              ? 'Correct!'
+              : 'Keep going — the phrase itself is the target.';
+
+          const id=
+            `${lang}-${lvl}-${ui}-${i}`;
+
+          state.lessonProgress[id]=
+            ok ? 100 : 60;
+
+          save();
+
+          setTimeout(()=>{
+
+            if(i<phrases.length-1){
+
+              i++;
+              step();
+
+            }else{
+
+              visited.forEach(pi=>{
+
+                const k=
+                  `${lang}-${lvl}-${ui}-${pi}`;
+
+                state.lessonProgress[k]=100;
+
+                const raw=phrases[pi];
+                const phrase=getLessonText(raw);
+
+                if(phrase){
+
+                  state.vocab[phrase] ||= {
+                    word:phrase,
+                    meaning:
+                      `${course.name} lesson phrase`,
+                    lang,
+                    next:Date.now(),
+                    mastery:10,
+                    interval:0
+                  };
+
+                }
+
+              });
+
+              save();
+
+              const xp=
+                15 + correctCount*3;
+
+              touchStudy(
+                Math.max(2,visited.size),
+                xp,
+                `Completed ${u[0] || `Unit ${ui+1}`}`
+              );
+
+              close('lessonDialog');
+
+              toast(
+                `Lesson complete · +${xp} XP`
+              );
+
+              renderAll();
+
+            }
+
+          },650);
+
+        };
+
+      });
+
+  }
+
+  step();
+}
 function renderVocab(){const data=vocabData();$('deckTitle').textContent=`${LANG[state.lang]} ${state.level} Deck`;$('wordCount').textContent=data.length;$('dueCount').textContent=due();$('vocabBar').style.width=mastery()+'%';$('vocabMastery').textContent=mastery()+'%';$('vocabList').innerHTML=data.length?data.map(v=>`<div class="vocab"><div class="vicon">🧠</div><div class="grow"><b>${esc(v.word)}</b><div class="muted">${esc(v.meaning||'Saved phrase')} · mastery ${Math.round(v.mastery||0)}%</div><div class="progress" style="margin-top:6px"><i style="width:${Math.min(100,v.mastery||0)}%"></i></div></div><button class="btn small" data-vspeak="${esc(v.word)}">🔊</button></div>`).join(''):'<div class="empty">Your deck is empty. Complete a lesson or save a translated phrase.</div>';document.querySelectorAll('[data-vspeak]').forEach(b=>b.onclick=()=>speak(b.dataset.vspeak,state.lang));const badges=[];if(data.length>=5)badges.push('🃏 5 words');if(data.length>=20)badges.push('📚 20 words');if(mastery()>=50)badges.push('🌱 50% mastery');if(mastery()>=80)badges.push('🏆 80% mastery');$('badges').innerHTML=badges.length?badges.map(x=>`<span class="achievement">${x}</span>`).join(''):'<span class="muted">Complete reviews to unlock milestones.</span>'}
 function reviewDeck(){const data=vocabData().filter(v=>!v.next||v.next<=Date.now());if(!data.length){toast('You are all caught up!');return}let i=0;$('reviewDialog').classList.add('open');function show(){const v=data[i];$('reviewBody').innerHTML=`<div class="flash"><span class="badge">Card ${i+1} / ${data.length}</span><div class="flashword">${esc(v.word)}</div><button class="btn" id="reveal">Show meaning</button><div class="meaning" id="meaning"></div><div class="rates" id="rates" style="display:none"><button class="btn" data-rate="again">Again</button><button class="btn" data-rate="hard">Hard</button><button class="btn primary" data-rate="good">Good</button><button class="btn good" data-rate="easy">Easy</button></div></div>`;$('reveal').onclick=()=>{$('meaning').textContent=v.meaning||'Review this phrase in context.';$('rates').style.display='flex';document.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{const r=b.dataset.rate;const cfg={again:[10,0],hard:[35,3600000],good:[70,86400000*3],easy:[100,86400000*7]}[r];v.mastery=Math.min(100,(v.mastery||0)+(r==='again'?0:r==='hard'?8:r==='good'?15:22));v.interval=cfg[0];v.next=Date.now()+cfg[1];save();touchStudy(1,3,`Reviewed “${v.word}”`);i++;if(i>=data.length){close('reviewDialog');toast('Review complete!')}else show()})}}show()}
 function addWord(){const w=prompt('Word or phrase');if(!w?.trim())return;const m=prompt('Meaning or translation')||'';state.vocab[w.trim()]={word:w.trim(),meaning:m,lang:state.lang,next:Date.now(),mastery:0,interval:0};save();renderVocab();toast('Added to your deck')}
@@ -2100,7 +2427,33 @@ async function translate(){const text=$('inputText').value.trim();if(!text){$('t
 function saveCurrent(){if(!lastTranslation){toast('Translate something first.');return}state.vocab[lastTranslation]={word:lastTranslation,meaning:$('inputText').value,lang:$('targetLang').value,next:Date.now(),mastery:0,interval:0};state.lang=$('targetLang').value;save();renderVocab();toast('Saved to vocabulary')}
 function close(id){$(id).classList.remove('open')}
 function setGoal(g){state.goal=g;state.todayMinutes=Math.min(state.todayMinutes,g);save();renderAll();close('goalDialog');close('settingsDialog');toast(`Daily goal set to ${g} minutes`)}
-function renderAll(){renderHome();renderLearn();renderVocab();renderSpeak()}
+function renderAll(){
+
+  try{
+    renderHome();
+  }catch(e){
+    console.error('Lingua renderHome error:',e);
+  }
+
+  try{
+    renderLearn();
+  }catch(e){
+    console.error('Lingua renderLearn error:',e);
+  }
+
+  try{
+    renderVocab();
+  }catch(e){
+    console.error('Lingua renderVocab error:',e);
+  }
+
+  try{
+    renderSpeak();
+  }catch(e){
+    console.error('Lingua renderSpeak error:',e);
+  }
+
+}
 // Navigation and UI
 populateVoiceSelect(state.lang);loadAudioManifest();document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>navigate(b.dataset.nav));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('.dialog').classList.remove('open'));$('theme').onclick=()=>{state.theme=state.theme==='dark'?'light':'dark';document.body.classList.toggle('dark',state.theme==='dark');save()};$('settings').onclick=()=>{$('settingsDialog').classList.add('open')};$('editGoal').onclick=()=>{$('goalDialog').classList.add('open')};['goalChoices','goalChoices2'].forEach(id=>{$(id).innerHTML=[10,15,20,30].map(g=>`<button class="btn" data-g="${g}">${g} min</button>`).join('');$(id).querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>setGoal(+b.dataset.g))});$('courseLang').onchange=()=>{state.lang=$('courseLang').value;state.speakIndex=0;save();populateSelects();renderAll()};$('courseLevel').onchange=()=>{state.level=$('courseLevel').value;state.speakIndex=0;save();renderAll()};$('settingsLang').onchange=()=>{state.lang=$('settingsLang').value;save();populateSelects();renderAll()};$('deckLevel').onchange=()=>{state.level=$('deckLevel').value;save();renderAll()};$('conversationLang').onchange=()=>{conversation.lang=$('conversationLang').value;conversation.turn=0;conversation.scenario=Object.keys(CONVERSATIONS[conversation.lang]||{})[0]||'introductions';renderConversation()};$('conversationScenario').onchange=()=>{conversation.scenario=$('conversationScenario').value;conversation.turn=0;renderConversation()};$('conversationHear').onclick=()=>{const t=conversationTurns()[conversation.turn];if(t)playPronunciation(t[0],conversation.lang,.88,'', $('conversationStatus'))};$('conversationHearSlow').onclick=()=>{const t=conversationTurns()[conversation.turn];if(t)playPronunciation(t[0],conversation.lang,.65,'', $('conversationStatus'))};$('conversationHint').onclick=()=>{$('conversationHintText').style.display=$('conversationHintText').style.display==='none'?'block':'none'};$('conversationMic').onclick=startConversationRecognition;$('tutorLang').onchange=()=>{tutor.lang=$('tutorLang').value;tutor.messages=[];renderTutor()};$('tutorLevel').onchange=()=>{tutor.level=$('tutorLevel').value;tutor.messages=[];renderTutor()};$('tutorScenario').onchange=()=>{tutor.scenario=$('tutorScenario').value;tutor.messages=[];renderTutor()};$('tutorSend').onclick=tutorSend;$('tutorInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();tutorSend()}});$('tutorSpeak').onclick=startTutorSpeech;$('tutorHint').onclick=tutorHint;$('tutorExplain').onclick=tutorExplain;$('tutorClear').onclick=()=>{tutor.messages=[];$('tutorFeedback').style.display='none';renderTutor()};$('tutorHear').onclick=()=>{if(tutor.lastReply)playPronunciation(tutor.lastReply,tutor.lang,.88,'',$('tutorStatus'))};$('tutorSaveWord').onclick=()=>{if(!tutor.lastWord)return toast('The tutor has not supplied a vocabulary word yet.');state.vocab[tutor.lastWord]={word:tutor.lastWord,meaning:'Tutor vocabulary',lang:tutor.lang,next:Date.now(),mastery:0,interval:0};save();renderVocab();toast('Saved to vocabulary')};$('reviewDeck').onclick=reviewDeck;$('addWord').onclick=addWord;$('nextSpeak').onclick=()=>{state.speakIndex++;save();renderSpeak()};$('hear').onclick=()=>playPronunciation(currentSpeak().text,state.lang,.88,currentSpeak().audioKey,$('voiceStatus'));$('hearSlow').onclick=()=>playPronunciation(currentSpeak().text,state.lang,.65,currentSpeak().audioKey,$('voiceStatus'));$('speakAdd').onclick=()=>{const x=currentSpeak();state.vocab[x.text]={word:x.text,meaning:`${LANG[state.lang]} lesson phrase`,lang:state.lang,next:Date.now(),mastery:10,interval:0};save();renderVocab();toast('Saved to deck')};$('mic').onclick=startSpeech;$('voiceSelect').onchange=()=>{localStorage.setItem('linguaVoice',$('voiceSelect').value);$('settingsVoiceStatus').textContent=$('voiceSelect').value?`Selected voice: ${voices[Number($('voiceSelect').value)]?.name||'unknown'}`:'Automatic voice selection enabled'};$('testVoice').onclick=async()=>{const b=$('testVoice'),x=currentSpeak();b.disabled=true;$('settingsVoiceStatus').textContent='Checking browser speech voices…';try{await playPronunciation(x.text,state.lang,.88,x.audioKey,$('settingsVoiceStatus'))}finally{b.disabled=false}};$('testFallback').onclick=async()=>{const b=$('testFallback'),x=currentSpeak();b.disabled=true;try{await ttsSpeak(cleanTextForSpeech(x.text),state.lang,.88,$('settingsVoiceStatus'),true,true)}catch(e){$('settingsVoiceStatus').textContent=`Browser fallback failed: ${e?.message||'unknown error'}`}finally{b.disabled=false}};$('translateBtn').onclick=translate;$('listenInput').onclick=()=>speak($('inputText').value,$('sourceLang').value==='auto'?'en':$('sourceLang').value);$('listenOutput').onclick=()=>speak(lastTranslation,$('targetLang').value);$('saveTranslation').onclick=saveCurrent;$('usePractice').onclick=()=>{if(!lastTranslation)return toast('Translate something first.');state.vocab[lastTranslation]={word:lastTranslation,meaning:$('inputText').value,lang:$('targetLang').value,next:Date.now(),mastery:0,interval:0};state.lang=$('targetLang').value;save();populateSelects();navigate('speak')};$('swap').onclick=()=>{const a=$('sourceLang').value,b=$('targetLang').value;if(a==='auto')return toast('Choose a source language first.');$('sourceLang').value=b;$('targetLang').value=a};$('reset').onclick=()=>{if(confirm('Reset all Lingua learning progress?')){localStorage.removeItem(key);location.reload()}};window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('installBtn').style.display='inline-block'});$('installBtn').onclick=async()=>{if(deferredInstall){deferredInstall.prompt();deferredInstall=null}};
 populateSelects();populateConversation();renderTutor();document.body.classList.toggle('dark',state.theme==='dark');renderAll();
