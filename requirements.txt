@@ -1,2 +1,3 @@
-Flask>=3.0,<4
-gunicorn>=23,<24
+Flask<4,>=3.0
+gunicorn<24,>=23
+openai>=1.0.0
