@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request, send_from_directory
+from openai import OpenAI
 import json
 import os
 import re
-from urllib import request as urlrequest
-from urllib.error import HTTPError, URLError
-
 app = Flask(__name__, static_folder=".", static_url_path="")
-
+openai_client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 LANGUAGES = {
     "en": "English",
     "sw": "Kiswahili",
@@ -950,10 +950,15 @@ def languages():
 
 @app.get("/health")
 def health():
-    return jsonify({"ok": True, "translation_configured": bool(os.getenv("TRANSLATION_API_URL", "").strip()), "ai_configured": bool(os.getenv("AI_API_URL", "").strip())})
-
-
-@app.post("/assist")
+    return jsonify({
+        "ok": True,
+        "translation_configured": bool(
+            os.getenv("TRANSLATION_API_URL", "").strip()
+        ),
+        "ai_configured": bool(
+            os.getenv("OPENAI_API_KEY", "").strip()
+        )
+    })
 def assist_endpoint():
     data = request.get_json(silent=True) or {}
     text = str(data.get("text", "")).strip()
@@ -1010,53 +1015,116 @@ def offline_tutor_reply(language, level, scenario, message):
     elif level in {"B1", "B2"} and len(clean.split()) < 4:
         corrections = "Good start. At this level, try adding one reason, detail, or time expression."
     return {"response": prompts.get(language, "Great job! Keep practising. Can you add one more detail?"), "correction": corrections, "provider": "offline", "xp": 4}
-
 @app.post("/tutor")
 def tutor_endpoint():
     data = request.get_json(silent=True) or {}
+
     language = str(data.get("language", "es")).strip().lower()
     level = str(data.get("level", "A1")).strip().upper()
     scenario = str(data.get("scenario", "free")).strip().lower()
     message = str(data.get("message", "")).strip()
     history = data.get("history", [])
+
     if language not in LANGUAGES:
         return jsonify({"error": "Unsupported language."}), 400
+
     if level not in {"A1", "A2", "B1", "B2"}:
         return jsonify({"error": "Unsupported level."}), 400
+
     if not message:
         return jsonify({"error": "Please enter a message."}), 400
-    if len(message) > 2000:
-        return jsonify({"error": "Please keep the tutor message under 2,000 characters."}), 400
-    endpoint = os.getenv("AI_API_URL", "").strip()
-    api_key = os.getenv("AI_API_KEY", "").strip()
-    if endpoint:
-        system = (f"You are Lingua, a safe language-learning tutor. Teach {LANGUAGES[language]} at CEFR-style level {level}. "
-                  f"Scenario: {scenario}. Reply mainly in the target language, keep explanations simple, gently correct important errors, "
-                  "and ask one useful follow-up question. Never pretend to be a human or romantic companion.")
-        payload = {"prompt": system + "\n\nConversation history:\n" + json.dumps(history[-8:], ensure_ascii=False) + "\n\nLearner message: " + message,
-                   "text": message, "language": language, "level": level, "scenario": scenario, "history": history[-8:]}
-        try:
-            headers = {"Content-Type": "application/json", "Accept": "application/json"}
-            if api_key:
-                headers["Authorization"] = f"Bearer {api_key}"
-            req = urlrequest.Request(endpoint, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers, method="POST")
-            with urlrequest.urlopen(req, timeout=ONLINE_TIMEOUT) as response:
-                result = json.loads(response.read().decode("utf-8"))
-            answer = extract_translation(result)
-            if isinstance(result, dict):
-                answer = answer or result.get("response") or result.get("output") or result.get("message")
-                if not answer and isinstance(result.get("choices"), list) and result["choices"]:
-                    choice = result["choices"][0]
-                    if isinstance(choice, dict):
-                        answer = choice.get("text")
-                        if isinstance(choice.get("message"), dict):
-                            answer = choice["message"].get("content") or answer
-            if isinstance(answer, str) and answer.strip():
-                return jsonify({"response": answer.strip(), "provider": "ai", "xp": 6})
-        except (HTTPError, URLError, TimeoutError, ValueError, OSError, KeyError, TypeError):
-            pass
-    return jsonify(offline_tutor_reply(language, level, scenario, message))
 
+    if len(message) > 2000:
+        return jsonify({
+            "error": "Please keep the tutor message under 2,000 characters."
+        }), 400
+
+    if not isinstance(history, list):
+        history = []
+
+    # Keep the conversation reasonably small.
+    history = history[-8:]
+
+    language_name = LANGUAGES[language]
+
+    instructions = f"""
+You are Lingua, a friendly and patient AI language-learning tutor.
+
+The learner is studying:
+- Target language: {language_name}
+- CEFR-style level: {level}
+- Scenario: {scenario}
+
+Teaching rules:
+- Help the learner practise {language_name}.
+- Keep your target-language vocabulary and grammar appropriate for {level}.
+- Encourage the learner without being excessive.
+- Correct important mistakes gently.
+- When correcting an important mistake, briefly explain the correction in English.
+- Ask one useful follow-up question when appropriate.
+- Do not overwhelm beginner learners with advanced grammar.
+- Keep responses reasonably concise.
+- Never pretend to be a human.
+- Do not create romantic or intimate roleplay.
+"""
+
+    # Convert the existing Lingua history into a simple text context.
+    history_text = ""
+
+    if history:
+        history_lines = []
+
+        for item in history:
+            if not isinstance(item, dict):
+                continue
+
+            role = str(item.get("role", "")).strip()
+            content = str(
+                item.get("content", item.get("message", ""))
+            ).strip()
+
+            if role and content:
+                history_lines.append(
+                    f"{role}: {content}"
+                )
+
+        if history_lines:
+            history_text = (
+                "\n\nRecent conversation:\n"
+                + "\n".join(history_lines)
+            )
+
+    prompt = (
+        f"Learner's message:\n{message}"
+        f"{history_text}"
+    )
+
+    try:
+        response = openai_client.responses.create(
+            model="gpt-5.6-luna",
+            instructions=instructions,
+            input=prompt
+        )
+
+        answer = (response.output_text or "").strip()
+
+        if not answer:
+            return jsonify({
+                "error": "The AI tutor returned an empty response."
+            }), 502
+
+        return jsonify({
+            "response": answer,
+            "provider": "openai",
+            "xp": 6
+        })
+
+    except Exception:
+        app.logger.exception("OpenAI tutor request failed")
+
+        return jsonify({
+            "error": "The AI tutor is temporarily unavailable."
+        }), 502
 @app.post("/translate")
 def translate_endpoint():
     data = request.get_json(silent=True) or {}
