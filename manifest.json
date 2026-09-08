@@ -1,4 +1,10 @@
 {
-  "version": 1,
-  "languages": {}
+  "name": "Lingua — Understand. Speak. Learn.",
+  "short_name": "Lingua",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#38bdf8",
+  "description": "A translation, pronunciation and language-learning workspace.",
+  "icons": [{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
