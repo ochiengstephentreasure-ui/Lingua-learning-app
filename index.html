@@ -1694,9 +1694,53 @@ function progressFor(lang=state.lang,lvl=state.level){
 }
 function due(){return Object.values(state.vocab).filter(v=>!v.next||v.next<=Date.now()).length}
 function navigate(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.nav===id));window.scrollTo({top:0,behavior:'smooth'});renderAll()}
-function populateSelects(){const langs=Object.entries(LANG);$('courseLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('settingsLang').innerHTML=$('courseLang').innerHTML;$('courseLang').value=state.lang;$('settingsLang').value=state.lang;$('sourceLang').innerHTML='<option value="auto">Auto-detect</option>'+langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').innerHTML=langs.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');$('targetLang').value=state.lang;$('deckLevel').innerHTML=['A1','A2','B1','B2'].map(x=>`<option>${x}</option>`).join('');$('deckLevel').value=state.level;populateStartPoint()}
+function populateSelects(){
+
+  const langs=Object.entries(LANG);
+
+  /* Course language */
+  $('courseLang').innerHTML=langs
+    .map(([k,v])=>`<option value="${k}">${esc(v)}</option>`)
+    .join('');
+
+  /* Settings language */
+  $('settingsLang').innerHTML=$('courseLang').innerHTML;
+
+  /* Translation languages */
+  $('sourceLang').innerHTML=
+    '<option value="auto">Auto-detect</option>'+
+    langs.map(([k,v])=>`<option value="${k}">${esc(v)}</option>`).join('');
+
+  $('targetLang').innerHTML=langs
+    .map(([k,v])=>`<option value="${k}">${esc(v)}</option>`)
+    .join('');
+
+  /* Course levels */
+  const levels=['A1','A2','B1','B2'];
+
+  $('courseLevel').innerHTML=levels
+    .map(x=>`<option value="${x}">${x}</option>`)
+    .join('');
+
+  /* Vocabulary deck levels */
+  $('deckLevel').innerHTML=levels
+    .map(x=>`<option value="${x}">${x}</option>`)
+    .join('');
+
+  /* Restore current state */
+  $('courseLang').value=state.lang;
+  $('settingsLang').value=state.lang;
+  $('targetLang').value=state.lang;
+  $('courseLevel').value=state.level;
+  $('deckLevel').value=state.level;
+
+  populateStartPoint();
+}
 function populateStartPoint(){const c=COURSES[state.lang];const lvl=state.level;const units=c?.units?.[lvl]||[];const sel=$('startPoint');if(!sel)return;sel.innerHTML=units.flatMap((u,ui)=>u[1].map((text,pi)=>`<option value="${ui}:${pi}">Unit ${ui+1} · ${esc(u[0])} · Phrase ${pi+1}</option>`)).join('');const first=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);sel.value=first?`${first.unit}:${first.phrase}`:'0:0'}
-function renderHome(){const pct=Math.round(state.todayMinutes/state.goal*100);$('streak').textContent=state.streak;$('xp').textContent=state.xp;$('level').textContent=level();$('mastery').textContent=mastery()+'%';$('goalPct').textContent=pct+'%';$('goalBar').style.width=Math.min(100,pct)+'%';$('ring').style.setProperty('--pct',Math.min(100,pct));$('goalText').textContent=`${state.goal} minutes today`;$('goalProgress').textContent=`${state.todayMinutes} / ${state.goal} minutes`;$('todayReview').textContent=`${due()} cards due`;const next=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);$('todayLesson').textContent=next?.title||'Level complete 🎉';$('todayLessonMeta').textContent=next?next.text:'Choose the next level to continue';$('todayLessonBtn').textContent=next?'Start':'Choose level';$('todayLessonBtn').onclick=()=>next?openLesson(next.unit):navigate('learn');$('courseCards').innerHTML=Object.entries(LANG).map(([k,n])=>{const p=progressFor(k,state.level);return `<article class="card course-card"><span class="badge">${state.level}</span><h3>${n}</h3><p class="muted">${COURSES[k].descs[state.level]}</p><div class="progress"><i style="width:${p}%"></i></div><p class="muted">${p}% level progress</p><button class="btn small ${k===state.lang?'primary':''}" data-course="${k}">${k===state.lang?'Continue':'Study'}</button></article>`}).join('');document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.course;save();populateSelects();navigate('learn')});$('activity').innerHTML=state.activity.length?state.activity.slice(0,6).map(a=>`<div class="lessonrow"><div class="grow"><b>${esc(a.label)}</b><div class="muted" style="font-size:12px">${new Date(a.at).toLocaleString()}</div></div><span class="pill">+${a.xp} XP</span></div>`).join(''):'<div class="empty">Complete a lesson, review a card or practise speaking to see your activity here.</div>'}
+function renderHome(){const pct=Math.round(state.todayMinutes/state.goal*100);$('streak').textContent=state.streak;$('xp').textContent=state.xp;$('level').textContent=level();$('mastery').textContent=mastery()+'%';$('goalPct').textContent=pct+'%';$('goalBar').style.width=Math.min(100,pct)+'%';$('ring').style.setProperty('--pct',Math.min(100,pct));$('goalText').textContent=`${state.goal} minutes today`;$('goalProgress').textContent=`${state.todayMinutes} / ${state.goal} minutes`;$('todayReview').textContent=`${due()} cards due`;const next=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);$('todayLesson').textContent=next?.title||'Level complete 🎉';$('todayLessonMeta').textContent=next?next.text:'Choose the next level to continue';$('todayLessonBtn').textContent=next?'Start':'Choose level';$('todayLessonBtn').onclick=()=>next?openLesson(next.unit):navigate('learn');$('courseCards').innerHTML=Object.entries(LANG).map(([k,n])=>{const p=progressFor(k,state.level);return `<article class="card course-card"><span class="badge">${state.level}</span><h3>${n}</h3><p class="muted">${esc(
+  COURSES[k]?.descs?.[state.level] ||
+  `Continue learning ${n}.`
+)}</p><div class="progress"><i style="width:${p}%"></i></div><p class="muted">${p}% level progress</p><button class="btn small ${k===state.lang?'primary':''}" data-course="${k}">${k===state.lang?'Continue':'Study'}</button></article>`}).join('');document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{state.lang=b.dataset.course;save();populateSelects();navigate('learn')});$('activity').innerHTML=state.activity.length?state.activity.slice(0,6).map(a=>`<div class="lessonrow"><div class="grow"><b>${esc(a.label)}</b><div class="muted" style="font-size:12px">${new Date(a.at).toLocaleString()}</div></div><span class="pill">+${a.xp} XP</span></div>`).join(''):'<div class="empty">Complete a lesson, review a card or practise speaking to see your activity here.</div>'}
 function levelUnlocked(level){
   if(!COURSES[state.lang]?.units?.[level]) return false;
   if(level==='A1') return true;
@@ -1705,7 +1749,241 @@ function levelUnlocked(level){
   return progressFor(state.lang,prev)>=80;
 }
 function configureLevelOptions(){const sel=$('courseLevel');if(!sel)return;Array.from(sel.options).forEach(o=>{o.disabled=!levelUnlocked(o.value);o.textContent=levelUnlocked(o.value)?o.value:`${o.value} 🔒`;});if(!levelUnlocked(sel.value)){sel.value=['A1','A2','B1','B2'].filter(levelUnlocked).pop()||'A1';state.level=sel.value;save();}}
-function renderLearn(){state.lang=$('courseLang').value||state.lang;configureLevelOptions();state.level=$('courseLevel').value||state.level;const c=COURSES[state.lang],p=progressFor();$('courseName').textContent=c.name;$('courseDescription').textContent=c.descs[state.level];$('courseBadge').textContent=state.level+' · '+({A1:'Beginner',A2:'Elementary',B1:'Intermediate',B2:'Upper intermediate'}[state.level]);$('levelMastery').textContent=p+'%';$('levelBar').style.width=p+'%';const units=c.units[state.level]||[];$('coursePath').innerHTML=units.map((u,ui)=>`<article class="unit"><div class="unithead"><div class="unitnum">${ui+1}</div><div class="unitgrow"><b>${esc(u[0])}</b><div class="muted">${u[1].length} core phrases</div></div></div>${u[1].map((text,pi)=>{const q=state.lessonProgress[`${state.lang}-${state.level}-${ui}-${pi}`]||0;return `<div class="lessonrow"><div class="grow"><b>${esc(text)}</b><div class="progress" style="margin-top:7px"><i style="width:${q}%"></i></div></div><span class="muted">${q}%</span><button class="btn small" data-openlesson="${ui}" data-startphrase="${pi}">${q?'Review':'Start'}</button></div>`}).join('')}</article>`).join('');document.querySelectorAll('[data-openlesson]').forEach(b=>b.onclick=()=>openLesson(+b.dataset.openlesson,+b.dataset.startphrase||0));populateStartPoint();$('startNext').onclick=()=>{const x=allCourseLessons().find(x=>(state.lessonProgress[`${state.lang}-${state.level}-${x.unit}-${x.phrase}`]||0)<100);if(x)openLesson(x.unit,x.phrase);else toast('Level complete — choose another level above.')};$('startChosen').onclick=()=>{const v=$('startPoint').value.split(':').map(Number);openLesson(Number.isFinite(v[0])?v[0]:0,Number.isFinite(v[1])?v[1]:0)};$('courseLevel').value=state.level;save()}
+function renderLearn(){
+
+  /* Keep language selector and state synchronized */
+  const selectedLang=$('courseLang')?.value;
+
+  if(selectedLang && LANG[selectedLang]){
+    state.lang=selectedLang;
+  }
+
+  /* Make sure the level selector exists */
+  const levelSelect=$('courseLevel');
+
+  if(!levelSelect){
+    console.error('Lingua: #courseLevel element was not found.');
+    return;
+  }
+
+  /* Make sure the selector contains all supported levels */
+  if(!levelSelect.options.length){
+
+    levelSelect.innerHTML=['A1','A2','B1','B2']
+      .map(x=>`<option value="${x}">${x}</option>`)
+      .join('');
+
+  }
+
+  /* Restore the saved level before checking locks */
+  if(
+    Array.from(levelSelect.options)
+      .some(o=>o.value===state.level)
+  ){
+    levelSelect.value=state.level;
+  }else{
+    levelSelect.value='A1';
+    state.level='A1';
+  }
+
+  /* Apply level locking */
+  configureLevelOptions();
+
+  /* Read the final valid level */
+  state.level=levelSelect.value || 'A1';
+
+  const c=COURSES[state.lang];
+
+  if(!c){
+    console.error('Lingua: course not found for language:',state.lang);
+    return;
+  }
+
+  const units=c.units?.[state.level] || [];
+
+  const p=progressFor(state.lang,state.level);
+
+  $('courseName').textContent=c.name || LANG[state.lang];
+
+  $('courseDescription').textContent=
+    c.descs?.[state.level] ||
+    `Continue learning ${LANG[state.lang]}.`;
+
+  $('courseBadge').textContent=
+    state.level+' · '+
+    ({
+      A1:'Beginner',
+      A2:'Elementary',
+      B1:'Intermediate',
+      B2:'Upper intermediate'
+    }[state.level] || 'Course');
+
+  $('levelMastery').textContent=p+'%';
+
+  $('levelBar').style.width=Math.min(100,p)+'%';
+
+  /* No units available */
+  if(!units.length){
+
+    $('coursePath').innerHTML=`
+      <div class="empty">
+        <b>No lessons are available for ${esc(state.level)} yet.</b>
+        <p class="muted">
+          Choose another available level to continue learning.
+        </p>
+      </div>
+    `;
+
+  }else{
+
+    $('coursePath').innerHTML=units.map((u,ui)=>{
+
+      const title=u?.[0] || `Unit ${ui+1}`;
+      const phrases=Array.isArray(u?.[1]) ? u[1] : [];
+
+      return `
+        <article class="unit">
+
+          <div class="unithead">
+
+            <div class="unitnum">
+              ${ui+1}
+            </div>
+
+            <div class="unitgrow">
+              <b>${esc(title)}</b>
+
+              <div class="muted">
+                ${phrases.length} core phrases
+              </div>
+            </div>
+
+          </div>
+
+          ${phrases.map((text,pi)=>{
+
+            const phraseText=getLessonText(text);
+
+            const progress=
+              Number(
+                state.lessonProgress?.[
+                  `${state.lang}-${state.level}-${ui}-${pi}`
+                ] || 0
+              );
+
+            return `
+              <div class="lessonrow">
+
+                <div class="grow">
+
+                  <b>${esc(phraseText)}</b>
+
+                  <div
+                    class="progress"
+                    style="margin-top:7px"
+                  >
+                    <i style="width:${Math.min(100,progress)}%"></i>
+                  </div>
+
+                </div>
+
+                <span class="muted">
+                  ${progress}%
+                </span>
+
+                <button
+                  class="btn small"
+                  data-openlesson="${ui}"
+                  data-startphrase="${pi}"
+                >
+                  ${progress ? 'Review' : 'Start'}
+                </button>
+
+              </div>
+            `;
+
+          }).join('')}
+
+        </article>
+      `;
+
+    }).join('');
+
+  }
+
+  /* Lesson buttons */
+  document
+    .querySelectorAll('[data-openlesson]')
+    .forEach(button=>{
+
+      button.onclick=()=>{
+
+        const unit=Number(button.dataset.openlesson);
+        const phrase=Number(button.dataset.startphrase);
+
+        openLesson(
+          Number.isFinite(unit) ? unit : 0,
+          Number.isFinite(phrase) ? phrase : 0
+        );
+
+      };
+
+    });
+
+  /* Start point selector */
+  populateStartPoint();
+
+  /* Start next lesson */
+  $('startNext').onclick=()=>{
+
+    const next=allCourseLessons(
+      state.lang,
+      state.level
+    ).find(x=>{
+
+      const key=
+        `${state.lang}-${state.level}-${x.unit}-${x.phrase}`;
+
+      return Number(state.lessonProgress?.[key] || 0)<100;
+
+    });
+
+    if(next){
+
+      openLesson(
+        next.unit,
+        next.phrase
+      );
+
+    }else{
+
+      toast(
+        'Level complete — choose another level above.'
+      );
+
+    }
+
+  };
+
+  /* Start selected lesson */
+  $('startChosen').onclick=()=>{
+
+    const value=$('startPoint').value || '0:0';
+
+    const parts=value.split(':').map(Number);
+
+    const unit=
+      Number.isFinite(parts[0]) ? parts[0] : 0;
+
+    const phrase=
+      Number.isFinite(parts[1]) ? parts[1] : 0;
+
+    openLesson(unit,phrase);
+
+  };
+
+  save();
+}
 function lessonQuizOptions(correct,lang){const pool=allCourseLessons(lang,state.level).map(x=>x.text).filter(x=>x!==correct);return [correct,...pool.sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5)}
 function openLesson(ui,startPhrase=0){const lang=state.lang,lvl=state.level,u=COURSES[lang].units[lvl][ui];if(!u)return;let i=Math.max(0,Math.min(startPhrase,u[1].length-1)),correctCount=0;const visited=new Set();$('lessonTitle').textContent=u[0];$('lessonBadge').textContent=`${lvl} · Unit ${ui+1}`;$('lessonDialog').classList.add('open');function step(){const text=u[1][i];$('lessonBody').innerHTML=`<div class="lessonbox"><p class="muted">Learn the phrase, hear it, then choose the meaning that best fits.</p><div class="card" style="margin-top:15px;background:var(--bg)"><span class="badge">Phrase ${i+1} / ${u[1].length}</span><div class="lessonphrase">${esc(text)}</div><div class="speak-row"><button class="btn" id="lessonSpeak">🔊 Listen</button><button class="btn" id="lessonSpeakSlow">🐢 Slow</button></div><div class="voice-note" id="lessonVoiceStatus"></div></div><div style="margin-top:18px"><b>Quick check</b><div id="lessonChoices"></div><div class="status" id="lessonStatus"></div></div></div>`;$('lessonSpeak').onclick=()=>playPronunciation(text,lang,0.88,audioKeyFor(lang,lvl,ui,i),$('lessonVoiceStatus'));$('lessonSpeakSlow').onclick=()=>playPronunciation(text,lang,0.65,audioKeyFor(lang,lvl,ui,i),$('lessonVoiceStatus'));$('lessonVoiceStatus').textContent=voiceMessage(lang);const opts=lessonQuizOptions(text,lang);$('lessonChoices').innerHTML=opts.map(o=>`<button class="btn choice" data-answer="${esc(o)}">${esc(o)}</button>`).join('');document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-answer]').forEach(x=>x.disabled=true);const ok=b.dataset.answer===text;b.classList.add(ok?'correct':'wrong');if(ok)correctCount++;visited.add(i);$('lessonStatus').textContent=ok?'Correct!':'Keep going — the phrase itself is the target.';const id=`${lang}-${lvl}-${ui}-${i}`;state.lessonProgress[id]=ok?100:60;save();setTimeout(()=>{if(i<u[1].length-1){i++;step()}else{visited.forEach(pi=>{const k=`${lang}-${lvl}-${ui}-${pi}`;state.lessonProgress[k]=100;const p=u[1][pi];state.vocab[p] ||= {word:p,meaning:`${COURSES[lang].name} lesson phrase`,lang,next:Date.now(),mastery:10,interval:0};});save();touchStudy(Math.max(2,visited.size),15+correctCount*3,`Completed ${u[0]}`);close('lessonDialog');toast(`Lesson complete · +${15+correctCount*3} XP`)}} ,650)})}step()}
 function vocabData(){return Object.values(state.vocab).filter(v=>v.lang===state.lang)}
