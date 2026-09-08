@@ -526,6 +526,125 @@ REVERSE_EXTRA_WORDS = {
 }
 
 
+# High-value sentence patterns for the offline translator.  These are kept
+# separate from the word dictionaries so common English grammar is translated
+# as a complete expression instead of producing awkward word-for-word output.
+OFFLINE_GRAMMAR = {
+    "sw": {
+        "where are you": "uko wapi", "where is it": "iko wapi", "where is home": "nyumbani ni wapi", "where is my house": "nyumba yangu iko wapi",
+        "where is the house": "nyumba iko wapi", "where is the school": "shule iko wapi", "where is the hotel": "hoteli iko wapi",
+        "what is your name": "jina lako nani", "what is my name": "jina langu nani", "how old are you": "una miaka mingapi",
+        "what are you doing": "unafanya nini", "where are you going": "unaenda wapi", "what do you want": "unataka nini",
+        "what do you need": "unahitaji nini", "what do you like": "unapenda nini", "what do you know": "unajua nini",
+        "how do i say this": "nasemaje hivi", "how do i say this in swahili": "nasemaje hivi kwa Kiswahili",
+        "how much is this": "hii ni bei gani", "how much does this cost": "hii inagharimu kiasi gani", "what time is it": "saa ngapi",
+        "i am learning swahili": "ninajifunza Kiswahili", "i am learning a language": "ninajifunza lugha",
+        "i am learning english": "ninajifunza Kiingereza", "i want to learn": "nataka kujifunza", "i want to go": "nataka kwenda",
+        "i want to eat": "nataka kula", "i want to drink water": "nataka kunywa maji", "i need help": "nahitaji msaada",
+        "i need water": "nahitaji maji", "i need a ticket": "nahitaji tiketi", "i need a doctor": "nahitaji daktari",
+        "i have a question": "nina swali", "i have time": "nina muda", "i have a problem": "nina tatizo",
+        "i do not understand": "sielewi", "i do not know": "sijui", "i do not speak swahili": "sizungumzi Kiswahili",
+        "i can speak a little swahili": "naweza kuzungumza Kiswahili kidogo", "can you help me": "unaweza kunisaidia",
+        "can you repeat that": "unaweza kurudia hiyo", "can you speak slowly": "unaweza kuzungumza polepole",
+        "please speak slowly": "tafadhali zungumza polepole", "please say it again": "tafadhali sema tena",
+        "do you speak english": "unaongea Kiingereza", "do you understand": "unaelewa", "are you ready": "uko tayari",
+        "i am ready": "niko tayari", "i am happy": "nina furaha", "i am tired": "nimechoka", "i am busy": "nina shughuli",
+        "i am at home": "niko nyumbani", "i am at school": "niko shuleni", "i am going home": "naenda nyumbani",
+        "i went home": "nilienda nyumbani", "i will go tomorrow": "nitaenda kesho", "i will call you later": "nitakupigia simu baadaye",
+        "see you tomorrow": "tutaonana kesho", "see you later": "tutaonana baadaye", "have a good day": "uwe na siku njema",
+        "there is a problem": "kuna tatizo", "there is no problem": "hakuna tatizo", "there is water": "kuna maji",
+        "this is my friend": "huyu ni rafiki yangu", "this is my house": "hii ni nyumba yangu", "that is my school": "hilo ni shule yangu",
+        "i like this": "napenda hii", "i do not like this": "sipendi hii", "i would like this": "ningependa hii",
+    },
+    "es": {
+        "where are you": "¿dónde estás?", "where is it": "¿dónde está?", "where is home": "¿dónde está la casa?", "where is my house": "¿dónde está mi casa?", "where is the house": "¿dónde está la casa?",
+        "where is the school": "¿dónde está la escuela?", "where is the hotel": "¿dónde está el hotel?", "what is your name": "¿cómo te llamas?",
+        "how old are you": "¿cuántos años tienes?", "what are you doing": "¿qué estás haciendo?", "where are you going": "¿adónde vas?",
+        "what do you want": "¿qué quieres?", "what do you need": "¿qué necesitas?", "what do you like": "¿qué te gusta?",
+        "how do i say this": "¿cómo digo esto?", "how do i say this in spanish": "¿cómo digo esto en español?",
+        "how much is this": "¿cuánto cuesta esto?", "what time is it": "¿qué hora es?", "i am learning spanish": "estoy aprendiendo español",
+        "i want to learn": "quiero aprender", "i want to go": "quiero ir", "i want to eat": "quiero comer", "i want to drink water": "quiero beber agua",
+        "i need help": "necesito ayuda", "i need water": "necesito agua", "i need a ticket": "necesito un billete", "i need a doctor": "necesito un médico",
+        "i have a question": "tengo una pregunta", "i have time": "tengo tiempo", "i have a problem": "tengo un problema",
+        "i do not understand": "no entiendo", "i do not know": "no lo sé", "i do not speak spanish": "no hablo español",
+        "i can speak a little spanish": "puedo hablar un poco de español", "can you help me": "¿puedes ayudarme?", "can you repeat that": "¿puedes repetir eso?",
+        "can you speak slowly": "¿puedes hablar despacio?", "please speak slowly": "por favor, habla despacio", "please say it again": "por favor, dilo otra vez",
+        "do you speak english": "¿hablas inglés?", "do you understand": "¿entiendes?", "are you ready": "¿estás listo?", "i am ready": "estoy listo",
+        "i am happy": "estoy feliz", "i am tired": "estoy cansado", "i am busy": "estoy ocupado", "i am at home": "estoy en casa",
+        "i am at school": "estoy en la escuela", "i am going home": "voy a casa", "i went home": "fui a casa", "i will go tomorrow": "iré mañana",
+        "i will call you later": "te llamaré más tarde", "see you tomorrow": "nos vemos mañana", "see you later": "hasta luego", "have a good day": "que tengas un buen día",
+        "there is a problem": "hay un problema", "there is no problem": "no hay problema", "there is water": "hay agua", "this is my friend": "este es mi amigo",
+        "this is my house": "esta es mi casa", "that is my school": "esa es mi escuela", "i like this": "me gusta esto", "i do not like this": "no me gusta esto", "i would like this": "me gustaría esto",
+    },
+    "fr": {
+        "where are you": "où es-tu ?", "where is it": "où est-ce ?", "where is home": "où est la maison ?", "where is my house": "où est ma maison ?", "where is the house": "où est la maison ?",
+        "where is the school": "où est l'école ?", "where is the hotel": "où est l'hôtel ?", "what is your name": "comment t'appelles-tu ?",
+        "how old are you": "quel âge as-tu ?", "what are you doing": "qu'est-ce que tu fais ?", "where are you going": "où vas-tu ?",
+        "what do you want": "qu'est-ce que tu veux ?", "what do you need": "de quoi as-tu besoin ?", "what do you like": "qu'est-ce que tu aimes ?",
+        "how do i say this": "comment dit-on cela ?", "how do i say this in french": "comment dit-on cela en français ?",
+        "how much is this": "combien ça coûte ?", "what time is it": "quelle heure est-il ?", "i am learning french": "j'apprends le français",
+        "i want to learn": "je veux apprendre", "i want to go": "je veux aller", "i want to eat": "je veux manger", "i want to drink water": "je veux boire de l'eau",
+        "i need help": "j'ai besoin d'aide", "i need water": "j'ai besoin d'eau", "i need a ticket": "j'ai besoin d'un billet", "i need a doctor": "j'ai besoin d'un médecin",
+        "i have a question": "j'ai une question", "i have time": "j'ai le temps", "i have a problem": "j'ai un problème", "i do not understand": "je ne comprends pas",
+        "i do not know": "je ne sais pas", "i do not speak french": "je ne parle pas français", "i can speak a little french": "je peux parler un peu français",
+        "can you help me": "peux-tu m'aider ?", "can you repeat that": "peux-tu répéter cela ?", "can you speak slowly": "peux-tu parler lentement ?",
+        "please speak slowly": "parlez lentement, s'il vous plaît", "please say it again": "répétez-le, s'il vous plaît", "do you speak english": "parlez-vous anglais ?",
+        "do you understand": "comprends-tu ?", "are you ready": "es-tu prêt ?", "i am ready": "je suis prêt", "i am happy": "je suis heureux", "i am tired": "je suis fatigué", "i am busy": "je suis occupé",
+        "i am at home": "je suis à la maison", "i am at school": "je suis à l'école", "i am going home": "je rentre à la maison", "i went home": "je suis rentré à la maison",
+        "i will go tomorrow": "j'irai demain", "i will call you later": "je t'appellerai plus tard", "see you tomorrow": "à demain", "see you later": "à plus tard", "have a good day": "bonne journée",
+        "there is a problem": "il y a un problème", "there is no problem": "il n'y a pas de problème", "there is water": "il y a de l'eau", "this is my friend": "c'est mon ami",
+        "this is my house": "c'est ma maison", "that is my school": "c'est mon école", "i like this": "j'aime ça", "i do not like this": "je n'aime pas ça", "i would like this": "je voudrais ça",
+    },
+    "de": {
+        "where are you": "wo bist du?", "where is it": "wo ist es?", "where is home": "wo ist das Zuhause?", "where is my house": "wo ist mein Haus?", "where is the house": "wo ist das Haus?",
+        "where is the school": "wo ist die Schule?", "where is the hotel": "wo ist das Hotel?", "what is your name": "wie heißt du?", "how old are you": "wie alt bist du?",
+        "what are you doing": "was machst du?", "where are you going": "wo gehst du hin?", "what do you want": "was möchtest du?", "what do you need": "was brauchst du?",
+        "what do you like": "was magst du?", "how do i say this": "wie sagt man das?", "how do i say this in german": "wie sagt man das auf Deutsch?",
+        "how much is this": "wie viel kostet das?", "what time is it": "wie spät ist es?", "i am learning german": "ich lerne Deutsch", "i want to learn": "ich möchte lernen",
+        "i want to go": "ich möchte gehen", "i want to eat": "ich möchte essen", "i want to drink water": "ich möchte Wasser trinken", "i need help": "ich brauche Hilfe",
+        "i need water": "ich brauche Wasser", "i need a ticket": "ich brauche eine Fahrkarte", "i need a doctor": "ich brauche einen Arzt", "i have a question": "ich habe eine Frage",
+        "i have time": "ich habe Zeit", "i have a problem": "ich habe ein Problem", "i do not understand": "ich verstehe nicht", "i do not know": "ich weiß es nicht",
+        "i do not speak german": "ich spreche kein Deutsch", "i can speak a little german": "ich kann ein wenig Deutsch sprechen", "can you help me": "kannst du mir helfen?",
+        "can you repeat that": "kannst du das wiederholen?", "can you speak slowly": "kannst du langsam sprechen?", "please speak slowly": "bitte sprechen Sie langsam",
+        "please say it again": "bitte sagen Sie es noch einmal", "do you speak english": "sprichst du Englisch?", "do you understand": "verstehst du?", "are you ready": "bist du bereit?",
+        "i am ready": "ich bin bereit", "i am happy": "ich bin glücklich", "i am tired": "ich bin müde", "i am busy": "ich bin beschäftigt", "i am at home": "ich bin zu Hause",
+        "i am at school": "ich bin in der Schule", "i am going home": "ich gehe nach Hause", "i went home": "ich bin nach Hause gegangen", "i will go tomorrow": "ich werde morgen gehen",
+        "i will call you later": "ich rufe dich später an", "see you tomorrow": "bis morgen", "see you later": "bis später", "have a good day": "einen schönen Tag noch",
+        "there is a problem": "es gibt ein Problem", "there is no problem": "es gibt kein Problem", "there is water": "es gibt Wasser", "this is my friend": "das ist mein Freund",
+        "this is my house": "das ist mein Haus", "that is my school": "das ist meine Schule", "i like this": "das gefällt mir", "i do not like this": "das gefällt mir nicht", "i would like this": "ich hätte gern das",
+    },
+    "it": {
+        "where are you": "dove sei?", "where is it": "dov'è?", "where is home": "dov'è casa?", "where is my house": "dov'è casa mia?", "where is the house": "dov'è la casa?",
+        "where is the school": "dov'è la scuola?", "where is the hotel": "dov'è l'hotel?", "what is your name": "come ti chiami?", "how old are you": "quanti anni hai?",
+        "what are you doing": "cosa stai facendo?", "where are you going": "dove vai?", "what do you want": "cosa vuoi?", "what do you need": "di cosa hai bisogno?",
+        "what do you like": "cosa ti piace?", "how do i say this": "come si dice questo?", "how do i say this in italian": "come si dice questo in italiano?",
+        "how much is this": "quanto costa questo?", "what time is it": "che ore sono?", "i am learning italian": "sto imparando l'italiano", "i want to learn": "voglio imparare",
+        "i want to go": "voglio andare", "i want to eat": "voglio mangiare", "i want to drink water": "voglio bere acqua", "i need help": "ho bisogno di aiuto",
+        "i need water": "ho bisogno d'acqua", "i need a ticket": "ho bisogno di un biglietto", "i need a doctor": "ho bisogno di un medico", "i have a question": "ho una domanda",
+        "i have time": "ho tempo", "i have a problem": "ho un problema", "i do not understand": "non capisco", "i do not know": "non lo so",
+        "i do not speak italian": "non parlo italiano", "i can speak a little italian": "posso parlare un po' di italiano", "can you help me": "puoi aiutarmi?",
+        "can you repeat that": "puoi ripeterlo?", "can you speak slowly": "puoi parlare lentamente?", "please speak slowly": "parla lentamente, per favore",
+        "please say it again": "dillo di nuovo, per favore", "do you speak english": "parli inglese?", "do you understand": "capisci?", "are you ready": "sei pronto?",
+        "i am ready": "sono pronto", "i am happy": "sono felice", "i am tired": "sono stanco", "i am busy": "sono occupato", "i am at home": "sono a casa",
+        "i am at school": "sono a scuola", "i am going home": "vado a casa", "i went home": "sono andato a casa", "i will go tomorrow": "andrò domani",
+        "i will call you later": "ti chiamerò più tardi", "see you tomorrow": "a domani", "see you later": "a dopo", "have a good day": "buona giornata",
+        "there is a problem": "c'è un problema", "there is no problem": "non c'è problema", "there is water": "c'è acqua", "this is my friend": "questo è il mio amico",
+        "this is my house": "questa è casa mia", "that is my school": "quella è la mia scuola", "i like this": "mi piace questo", "i do not like this": "non mi piace questo", "i would like this": "vorrei questo",
+    },
+}
+
+# Common foreign words/phrases that learners frequently type when asking
+# "what does this mean?" Offline reverse translation uses these before the
+# broader generated dictionaries.
+REVERSE_LEARNER_WORDS = {
+    "es": {"casa":"home", "hogar":"home", "calle":"street", "ciudad":"city", "país":"country", "escuela":"school", "comida":"food", "agua":"water", "tiempo":"time", "hoy":"today", "mañana":"tomorrow", "ayer":"yesterday", "ahora":"now", "porque":"because", "pero":"but", "también":"also", "siempre":"always", "nunca":"never", "puedo":"I can", "quiero":"I want", "necesito":"I need", "tengo":"I have", "estoy":"I am", "soy":"I am", "eres":"you are", "es":"is"},
+    "fr": {"maison":"house", "chez":"at the home of", "rue":"street", "ville":"city", "pays":"country", "école":"school", "nourriture":"food", "eau":"water", "temps":"time", "aujourd'hui":"today", "demain":"tomorrow", "hier":"yesterday", "maintenant":"now", "parce que":"because", "mais":"but", "aussi":"also", "toujours":"always", "jamais":"never", "peux":"can", "veux":"want", "besoin":"need", "ai":"have", "suis":"am/am located", "es":"are", "est":"is"},
+    "de": {"haus":"house", "zuhause":"home", "straße":"street", "stadt":"city", "land":"country", "schule":"school", "essen":"food", "wasser":"water", "zeit":"time", "heute":"today", "morgen":"tomorrow", "gestern":"yesterday", "jetzt":"now", "weil":"because", "aber":"but", "auch":"also", "immer":"always", "nie":"never", "kann":"can", "will":"want", "brauche":"need", "habe":"have", "bin":"am", "bist":"are", "ist":"is"},
+    "it": {"casa":"home/house", "strada":"street", "città":"city", "paese":"country", "scuola":"school", "cibo":"food", "acqua":"water", "tempo":"time", "oggi":"today", "domani":"tomorrow", "ieri":"yesterday", "adesso":"now", "perché":"because", "ma":"but", "anche":"also", "sempre":"always", "mai":"never", "posso":"I can", "voglio":"I want", "bisogno":"need", "ho":"I have", "sono":"I am", "sei":"you are", "è":"is"},
+    "sw": {"nyumba":"house", "nyumbani":"at home", "mtaa":"street", "jiji":"city", "nchi":"country", "shule":"school", "chakula":"food", "maji":"water", "wakati":"time", "leo":"today", "kesho":"tomorrow", "jana":"yesterday", "sasa":"now", "kwa sababu":"because", "lakini":"but", "pia":"also", "daima":"always", "kamwe":"never", "naweza":"I can", "nataka":"I want", "nahitaji":"I need", "nina":"I have", "niko":"I am/am located", "uko":"you are", "ni":"is/are"},
+}
+
+
 def build_reverse_dictionary(source):
     """Build a foreign-language to English dictionary for offline translation."""
     if source == "en":
@@ -533,6 +652,7 @@ def build_reverse_dictionary(source):
 
     reverse = {}
     source_maps = [
+        REVERSE_LEARNER_WORDS.get(source, {}),
         REVERSE_EXTRA_WORDS.get(source, {}),
         EXPLICIT_WORDS.get(source, {}),
         EXTENDED_WORDS.get(source, {}),
@@ -563,6 +683,11 @@ def build_reverse_phrases(source):
         MULTILINGUAL_PHRASES.get(source, {}),
         PHRASES.get(source, {}),
     ]
+
+    # Add English -> foreign grammar patterns in reverse so learners can also
+    # type a foreign sentence and ask for its English meaning offline.
+    grammar = OFFLINE_GRAMMAR.get(source, {})
+    phrase_maps.append(grammar)
 
     for dictionary in phrase_maps:
         for english_phrase, translated_phrase in dictionary.items():
@@ -600,6 +725,30 @@ def detect_offline_source(text):
 
 
 def offline_translate(text, target, source="auto"):
+    # Normalize common English contractions so "Where's" can match the
+    # offline grammar library.
+    text = re.sub(r"(?i)\bwhere['’]s\b", "where is", text)
+    text = re.sub(r"(?i)\bwhat['’]s\b", "what is", text)
+    text = re.sub(r"(?i)\bwho['’]s\b", "who is", text)
+
+    # Auto-detect can identify a mixed sentence such as "Where's casa" as
+    # Spanish because of the single word "casa". For learner-friendly offline
+    # translation, first convert known target-language words back to English,
+    # then run the English grammar patterns into the requested target.
+    if source == "auto" and target not in ("en", "auto"):
+        mixed = text
+        reverse_words = build_reverse_dictionary(target)
+        reverse_phrases = build_reverse_phrases(target)
+        for foreign, english in sorted(reverse_phrases.items(), key=lambda item: len(item[0]), reverse=True):
+            pattern = r"(?i)(?<![A-Za-zÀ-ÿ])" + re.escape(foreign) + r"(?![A-Za-zÀ-ÿ])"
+            mixed = re.sub(pattern, lambda m, value=english: value, mixed)
+        for foreign, english in sorted(reverse_words.items(), key=lambda item: len(item[0]), reverse=True):
+            pattern = r"(?i)(?<![A-Za-zÀ-ÿ])" + re.escape(foreign) + r"(?![A-Za-zÀ-ÿ])"
+            mixed = re.sub(pattern, lambda m, value=english: value, mixed)
+        if mixed.lower() != text.lower():
+            text = mixed
+            source = "en"
+
     # When translating into English, use the source language's reverse maps.
     if target == "en" and source == "auto":
         source = detect_offline_source(text)
@@ -642,7 +791,7 @@ def offline_translate(text, target, source="auto"):
 
     result = text
     protected_phrases = []
-    phrases = {**CATEGORY_PHRASES.get(target, {}), **MULTILINGUAL_PHRASES.get(target, {}), **PHRASES.get(target, {})}
+    phrases = {**OFFLINE_GRAMMAR.get(target, {}), **CATEGORY_PHRASES.get(target, {}), **MULTILINGUAL_PHRASES.get(target, {}), **PHRASES.get(target, {})}
 
     # Match longer expressions first and temporarily protect their output.
     # This prevents a translated phrase from being altered by the word map.
@@ -926,6 +1075,7 @@ def translate_endpoint():
     use_offline = bool(data.get("use_offline", False))
     translation = None
     provider = "offline" if use_offline else "online"
+    detected_source = detect_offline_source(text) if source == "auto" else source
 
     # Offline mode must never contact an external provider. This keeps the
     # phrasebook private and makes it useful when the network is unavailable.
@@ -950,11 +1100,13 @@ def translate_endpoint():
             "error": "No online translation provider is configured or the phrase is not in Lingua's offline phrasebook yet. Enable Offline phrasebook for supported starter phrases, or configure TRANSLATION_API_URL on Render for full online translation."
         }), 503
 
+    offline_kind = "grammar" if translation.strip().lower() != text.strip().lower() and (use_offline or provider == "offline-fallback") else "dictionary"
     return jsonify({
         "translation": translation,
-        "detected_source": "en" if source == "auto" else source,
+        "detected_source": detected_source,
         "provider": provider,
         "offline_fallback": provider == "offline-fallback",
+        "offline_library": offline_kind if provider in {"offline", "offline-fallback"} else None,
     })
 
 
