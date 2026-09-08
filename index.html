@@ -46,7 +46,166 @@ const LANG={
   ja:'Japanese',
   ko:'Korean'
 };
-Object.assign(COURSES, {
+const COURSES={
+  es:{
+    name:'Spanish',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Hola.',
+          '¿Cómo estás?',
+          'Estoy bien, gracias.'
+        ]],
+        ['Unit 2 · Introductions',[
+          '¿Cómo te llamas?',
+          'Me llamo…',
+          'Mucho gusto.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Gracias.',
+          'Por favor.',
+          'Lo siento.'
+        ]],
+        ['Unit 4 · Around town',[
+          '¿Dónde está el baño?',
+          '¿Cuánto cuesta?',
+          'Necesito ayuda.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Spanish foundation for greetings, introductions and daily situations.',
+      A2:'Continue building everyday Spanish conversations.'
+    }
+  },
+
+  fr:{
+    name:'French',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Bonjour.',
+          'Comment ça va ?',
+          'Ça va bien, merci.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Comment tu t’appelles ?',
+          'Je m’appelle…',
+          'Enchanté.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Merci.',
+          'S’il vous plaît.',
+          'Excusez-moi.'
+        ]],
+        ['Unit 4 · Around town',[
+          'Où sont les toilettes ?',
+          'Combien ça coûte ?',
+          'J’ai besoin d’aide.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical French foundation for greetings, introductions and daily situations.',
+      A2:'Continue building everyday French conversations.'
+    }
+  },
+
+  sw:{
+    name:'Kiswahili',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Habari!',
+          'Hujambo?',
+          'Niko vizuri, asante.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Unaitwa nani?',
+          'Naitwa…',
+          'Nafurahi kukutana nawe.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Asante.',
+          'Tafadhali.',
+          'Samahani.'
+        ]],
+        ['Unit 4 · Around town',[
+          'Choo kiko wapi?',
+          'Ni bei gani?',
+          'Nahitaji msaada.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Kiswahili foundation for greetings, introductions and daily situations.',
+      A2:'Continue building everyday Kiswahili conversations.'
+    }
+  },
+
+  de:{
+    name:'German',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Hallo!',
+          'Wie geht es dir?',
+          'Mir geht es gut, danke.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Wie heißt du?',
+          'Ich heiße…',
+          'Freut mich.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Danke.',
+          'Bitte.',
+          'Entschuldigung.'
+        ]],
+        ['Unit 4 · Around town',[
+          'Wo ist die Toilette?',
+          'Wie viel kostet das?',
+          'Ich brauche Hilfe.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical German foundation for greetings, introductions and daily situations.',
+      A2:'Continue building everyday German conversations.'
+    }
+  },
+
+  it:{
+    name:'Italian',
+    units:{
+      A1:[
+        ['Unit 1 · Greetings',[
+          'Ciao!',
+          'Come stai?',
+          'Sto bene, grazie.'
+        ]],
+        ['Unit 2 · Introductions',[
+          'Come ti chiami?',
+          'Mi chiamo…',
+          'Piacere.'
+        ]],
+        ['Unit 3 · Everyday communication',[
+          'Grazie.',
+          'Per favore.',
+          'Scusa.'
+        ]],
+        ['Unit 4 · Around town',[
+          'Dov’è il bagno?',
+          'Quanto costa?',
+          'Ho bisogno di aiuto.'
+        ]]
+      ]
+    },
+    descs:{
+      A1:'Build a practical Italian foundation for greetings, introductions and daily situations.',
+      A2:'Continue building everyday Italian conversations.'
+    }
+  },
 
   lg:{
     name:'Luganda',
@@ -62,15 +221,15 @@ Object.assign(COURSES, {
           'Erinnya lyange nze…',
           'Nsanyuse okukulaba.'
         ]],
-        ['Unit 3 · Everyday life',[
+        ['Unit 3 · Everyday communication',[
           'Webale nyo.',
           'Mwattu.',
           'Nsonyiwa.'
         ]],
-        ['Unit 4 · Places & help',[
+        ['Unit 4 · Help',[
+          'Nnyamba!',
           'Ova wa?',
-          'Ova wa?',
-          'Nnyamba!'
+          'Webale.'
         ]]
       ]
     },
@@ -131,7 +290,7 @@ Object.assign(COURSES, {
           'Adwaro pi.',
           'Riyo deya.'
         ]],
-        ['Unit 4 · Places & actions',[
+        ['Unit 4 · Actions',[
           'Bi.',
           'Dhiyo.',
           'Kony!'
@@ -190,7 +349,7 @@ Object.assign(COURSES, {
           'Meu nome é…',
           'Prazer em conhecer você.'
         ]],
-        ['Unit 3 · Everyday life',[
+        ['Unit 3 · Everyday communication',[
           'Muito obrigado.',
           'Por favor.',
           'Desculpe.'
@@ -236,7 +395,7 @@ Object.assign(COURSES, {
     },
     descs:{
       A1:'Learn practical Arabic for greetings, introductions and everyday situations.',
-      A2:'Develop longer conversations and everyday Arabic vocabulary.'
+      A2:'Develop longer everyday Arabic conversations.'
     }
   },
 
@@ -367,8 +526,7 @@ Object.assign(COURSES, {
       A2:'Develop longer Korean conversations and everyday vocabulary.'
     }
   }
-
-});
+};
 const $=id=>document.getElementById(id), key='lingua_full_v4';
 const fresh={lang:'es',level:'A1',xp:0,streak:0,lastStudy:'',todayMinutes:0,totalMinutes:0,goal:15,lessonProgress:{},vocab:{},activity:[],theme:'light',speakIndex:0};
 let state=load(), lastTranslation='', recognition=null, deferredInstall=null;
