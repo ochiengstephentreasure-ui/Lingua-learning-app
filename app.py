@@ -845,6 +845,69 @@ def assist_endpoint():
     return jsonify({"response": "Here’s a built-in suggestion based on your phrase.", "suggestion": text, "provider": "guide"})
 
 
+
+def offline_tutor_reply(language, level, scenario, message):
+    prompts = {
+        "es": "¡Muy bien! Sigue practicando. ¿Puedes añadir un poco más de información?",
+        "fr": "Très bien ! Continuez à pratiquer. Pouvez-vous ajouter un peu plus d’information ?",
+        "sw": "Vizuri sana! Endelea kufanya mazoezi. Unaweza kuongeza maelezo kidogo?",
+        "de": "Sehr gut! Übe weiter. Kannst du noch ein bisschen mehr sagen?",
+        "it": "Molto bene! Continua a praticare. Puoi aggiungere qualche dettaglio?",
+    }
+    corrections = ""
+    clean = re.sub(r"\s+", " ", message.strip())
+    if len(clean.split()) < 2:
+        corrections = "Try a complete sentence with at least two words."
+    elif level in {"B1", "B2"} and len(clean.split()) < 4:
+        corrections = "Good start. At this level, try adding one reason, detail, or time expression."
+    return {"response": prompts.get(language, "Great job! Keep practising. Can you add one more detail?"), "correction": corrections, "provider": "offline", "xp": 4}
+
+@app.post("/tutor")
+def tutor_endpoint():
+    data = request.get_json(silent=True) or {}
+    language = str(data.get("language", "es")).strip().lower()
+    level = str(data.get("level", "A1")).strip().upper()
+    scenario = str(data.get("scenario", "free")).strip().lower()
+    message = str(data.get("message", "")).strip()
+    history = data.get("history", [])
+    if language not in LANGUAGES:
+        return jsonify({"error": "Unsupported language."}), 400
+    if level not in {"A1", "A2", "B1", "B2"}:
+        return jsonify({"error": "Unsupported level."}), 400
+    if not message:
+        return jsonify({"error": "Please enter a message."}), 400
+    if len(message) > 2000:
+        return jsonify({"error": "Please keep the tutor message under 2,000 characters."}), 400
+    endpoint = os.getenv("AI_API_URL", "").strip()
+    api_key = os.getenv("AI_API_KEY", "").strip()
+    if endpoint:
+        system = (f"You are Lingua, a safe language-learning tutor. Teach {LANGUAGES[language]} at CEFR-style level {level}. "
+                  f"Scenario: {scenario}. Reply mainly in the target language, keep explanations simple, gently correct important errors, "
+                  "and ask one useful follow-up question. Never pretend to be a human or romantic companion.")
+        payload = {"prompt": system + "\n\nConversation history:\n" + json.dumps(history[-8:], ensure_ascii=False) + "\n\nLearner message: " + message,
+                   "text": message, "language": language, "level": level, "scenario": scenario, "history": history[-8:]}
+        try:
+            headers = {"Content-Type": "application/json", "Accept": "application/json"}
+            if api_key:
+                headers["Authorization"] = f"Bearer {api_key}"
+            req = urlrequest.Request(endpoint, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers, method="POST")
+            with urlrequest.urlopen(req, timeout=ONLINE_TIMEOUT) as response:
+                result = json.loads(response.read().decode("utf-8"))
+            answer = extract_translation(result)
+            if isinstance(result, dict):
+                answer = answer or result.get("response") or result.get("output") or result.get("message")
+                if not answer and isinstance(result.get("choices"), list) and result["choices"]:
+                    choice = result["choices"][0]
+                    if isinstance(choice, dict):
+                        answer = choice.get("text")
+                        if isinstance(choice.get("message"), dict):
+                            answer = choice["message"].get("content") or answer
+            if isinstance(answer, str) and answer.strip():
+                return jsonify({"response": answer.strip(), "provider": "ai", "xp": 6})
+        except (HTTPError, URLError, TimeoutError, ValueError, OSError, KeyError, TypeError):
+            pass
+    return jsonify(offline_tutor_reply(language, level, scenario, message))
+
 @app.post("/translate")
 def translate_endpoint():
     data = request.get_json(silent=True) or {}

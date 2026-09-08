@@ -1,4 +1,4 @@
-const CACHE='lingua-v10';
+const CACHE='lingua-v11';
 const CORE=['/','/index.html','/manifest.json','/icon.svg','/audio/manifest.json'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
