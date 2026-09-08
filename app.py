@@ -766,6 +766,19 @@ def favicon():
     return send_from_directory(".", "icon.svg", mimetype="image/svg+xml")
 
 
+@app.get("/audio/manifest.json")
+def audio_manifest():
+    path = os.path.join(app.root_path, "audio", "manifest.json")
+    if not os.path.isfile(path):
+        return jsonify({"version": 1, "languages": {}})
+    return send_from_directory(os.path.join(app.root_path, "audio"), "manifest.json", mimetype="application/json")
+
+
+@app.get("/audio/<path:filename>")
+def course_audio(filename):
+    return send_from_directory(os.path.join(app.root_path, "audio"), filename)
+
+
 @app.get("/sw.js")
 def service_worker():
     return send_from_directory(".", "sw.js", mimetype="application/javascript")
