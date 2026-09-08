@@ -1115,373 +1115,393 @@ Object.assign(COURSES, {
         ]]
       ]
     }
-  }
-
-});/* =========================================================
-   ENGLISH TRANSLATIONS
-   Used for reverse translation exercises.
+  });
+/* =========================================================
+   LINGUA TRANSLATION SYSTEM
+   Target language <-> English
    ========================================================= */
 
 const ENGLISH_TRANSLATIONS = {
 
+  /* =========================
+     SPANISH
+     ========================= */
   es: {
-    "Hola.":"Hello.",
-    "Buenos días.":"Good morning.",
-    "Buenas noches.":"Good evening.",
-    "¿Cómo estás?":"How are you?",
-    "Me llamo Ana.":"My name is Ana.",
-    "¿De dónde eres?":"Where are you from?",
-    "Soy de Uganda.":"I am from Uganda.",
-    "¿Hablas inglés?":"Do you speak English?",
-    "Sí, hablo un poco de inglés.":"Yes, I speak a little English.",
-    "Gracias.":"Thank you.",
-    "De nada.":"You're welcome.",
-    "Por favor.":"Please.",
-    "Tengo una familia pequeña.":"I have a small family.",
-    "Mi madre trabaja en un hospital.":"My mother works in a hospital.",
-    "Tengo dos hermanos.":"I have two brothers.",
-    "Me levanto a las seis.":"I get up at six.",
-    "Voy a la escuela todos los días.":"I go to school every day.",
-    "Por la noche, leo un libro.":"At night, I read a book.",
-    "Quiero comprar pan.":"I want to buy bread.",
-    "¿Cuánto cuesta esto?":"How much does this cost?",
-    "Necesito una botella de agua.":"I need a bottle of water.",
-    "¿Dónde está la estación?":"Where is the station?",
-    "Quiero viajar mañana.":"I want to travel tomorrow.",
-    "¿A qué hora sale el autobús?":"What time does the bus leave?",
-    "Ayer visité a mi amigo.":"Yesterday I visited my friend.",
-    "Fue un día muy interesante.":"It was a very interesting day.",
-    "Comimos juntos.":"We ate together.",
-    "Mañana voy a estudiar.":"Tomorrow I am going to study.",
-    "Quiero aprender más español.":"I want to learn more Spanish.",
-    "El próximo año viajaré a España.":"Next year I will travel to Spain."
+    "Hola.": "Hello.",
+    "Buenos días.": "Good morning.",
+    "Buenas noches.": "Good evening.",
+    "¿Cómo estás?": "How are you?",
+    "Me llamo Ana.": "My name is Ana.",
+    "¿De dónde eres?": "Where are you from?",
+    "Soy de Uganda.": "I am from Uganda.",
+    "¿Hablas inglés?": "Do you speak English?",
+    "Sí, hablo un poco de inglés.": "Yes, I speak a little English.",
+    "Gracias.": "Thank you.",
+    "De nada.": "You're welcome.",
+    "Por favor.": "Please.",
+    "Tengo una familia pequeña.": "I have a small family.",
+    "Mi madre trabaja en un hospital.": "My mother works in a hospital.",
+    "Tengo dos hermanos.": "I have two brothers.",
+    "Me levanto a las seis.": "I get up at six.",
+    "Voy a la escuela todos los días.": "I go to school every day.",
+    "Por la noche, leo un libro.": "At night, I read a book.",
+    "Quiero comprar pan.": "I want to buy bread.",
+    "¿Cuánto cuesta esto?": "How much does this cost?",
+    "Necesito una botella de agua.": "I need a bottle of water.",
+    "¿Dónde está la estación?": "Where is the station?",
+    "Quiero viajar mañana.": "I want to travel tomorrow.",
+    "¿A qué hora sale el autobús?": "What time does the bus leave?",
+    "Ayer visité a mi amigo.": "Yesterday I visited my friend.",
+    "Fue un día muy interesante.": "It was a very interesting day.",
+    "Comimos juntos.": "We ate together.",
+    "Mañana voy a estudiar.": "Tomorrow I am going to study.",
+    "Quiero aprender más español.": "I want to learn more Spanish.",
+    "El próximo año viajaré a España.": "Next year I will travel to Spain."
   },
 
+  /* =========================
+     FRENCH
+     ========================= */
   fr: {
-    "Bonjour.":"Hello.",
-    "Bonsoir.":"Good evening.",
-    "Comment allez-vous ?":"How are you?",
-    "Je m'appelle Marie.":"My name is Marie.",
-    "Je viens d'Ouganda.":"I come from Uganda.",
-    "Parlez-vous anglais ?":"Do you speak English?",
-    "Je parle un peu français.":"I speak a little French.",
-    "Merci.":"Thank you.",
-    "De rien.":"You're welcome.",
-    "S'il vous plaît.":"Please.",
-    "J'ai une petite famille.":"I have a small family.",
-    "Ma mère travaille dans un hôpital.":"My mother works in a hospital.",
-    "J'ai deux frères.":"I have two brothers.",
-    "Je me lève à six heures.":"I get up at six.",
-    "Je vais à l'école tous les jours.":"I go to school every day.",
-    "Le soir, je lis un livre.":"At night, I read a book.",
-    "Je veux acheter du pain.":"I want to buy bread.",
-    "Combien ça coûte ?":"How much does it cost?",
-    "J'ai besoin d'une bouteille d'eau.":"I need a bottle of water.",
-    "Où est la gare ?":"Where is the station?",
-    "Je veux voyager demain.":"I want to travel tomorrow.",
-    "À quelle heure part le bus ?":"What time does the bus leave?",
-    "Hier, j'ai rendu visite à mon ami.":"Yesterday I visited my friend.",
-    "C'était une journée très intéressante.":"It was a very interesting day.",
-    "Nous avons mangé ensemble.":"We ate together.",
-    "Demain, je vais étudier.":"Tomorrow I am going to study.",
-    "Je veux apprendre davantage le français.":"I want to learn more French.",
-    "L'année prochaine, je voyagerai en France.":"Next year I will travel to France."
+    "Bonjour.": "Hello.",
+    "Bonsoir.": "Good evening.",
+    "Comment allez-vous ?": "How are you?",
+    "Je m'appelle Marie.": "My name is Marie.",
+    "Je viens d'Ouganda.": "I come from Uganda.",
+    "Parlez-vous anglais ?": "Do you speak English?",
+    "Je parle un peu français.": "I speak a little French.",
+    "Merci.": "Thank you.",
+    "De rien.": "You're welcome.",
+    "S'il vous plaît.": "Please.",
+    "J'ai une petite famille.": "I have a small family.",
+    "Ma mère travaille dans un hôpital.": "My mother works in a hospital.",
+    "J'ai deux frères.": "I have two brothers.",
+    "Je me lève à six heures.": "I get up at six.",
+    "Je vais à l'école tous les jours.": "I go to school every day.",
+    "Le soir, je lis un livre.": "In the evening, I read a book.",
+    "Je veux acheter du pain.": "I want to buy bread.",
+    "Combien ça coûte ?": "How much does it cost?",
+    "J'ai besoin d'une bouteille d'eau.": "I need a bottle of water.",
+    "Où est la gare ?": "Where is the station?",
+    "Je veux voyager demain.": "I want to travel tomorrow.",
+    "À quelle heure part le bus ?": "What time does the bus leave?",
+    "Hier, j'ai rendu visite à mon ami.": "Yesterday I visited my friend.",
+    "C'était une journée très intéressante.": "It was a very interesting day.",
+    "Nous avons mangé ensemble.": "We ate together.",
+    "Demain, je vais étudier.": "Tomorrow I am going to study.",
+    "Je veux apprendre davantage le français.": "I want to learn more French.",
+    "L'année prochaine, je voyagerai en France.": "Next year I will travel to France."
   },
 
+  /* =========================
+     KISWAHILI
+     ========================= */
   sw: {
-    "Habari.":"Hello.",
-    "Hujambo?":"How are you?",
-    "Jina langu ni Amina.":"My name is Amina.",
-    "Unatoka wapi?":"Where are you from?",
-    "Ninatoka Uganda.":"I am from Uganda.",
-    "Unazungumza Kiingereza?":"Do you speak English?",
-    "Ndiyo, ninazungumza Kiingereza kidogo.":"Yes, I speak a little English.",
-    "Asante.":"Thank you.",
-    "Karibu.":"You're welcome.",
-    "Tafadhali.":"Please.",
-    "Nina familia ndogo.":"I have a small family.",
-    "Mama yangu anafanya kazi hospitalini.":"My mother works in a hospital.",
-    "Nina ndugu wawili.":"I have two siblings.",
-    "Ninaamka saa kumi na mbili asubuhi.":"I wake up at six in the morning.",
-    "Ninaenda shuleni kila siku.":"I go to school every day.",
-    "Usiku, nasoma kitabu.":"At night, I read a book.",
-    "Nataka kununua mkate.":"I want to buy bread.",
-    "Hii ni bei gani?":"How much does this cost?",
-    "Nahitaji chupa ya maji.":"I need a bottle of water.",
-    "Kituo kiko wapi?":"Where is the station?",
-    "Nataka kusafiri kesho.":"I want to travel tomorrow.",
-    "Basi linaondoka saa ngapi?":"What time does the bus leave?",
-    "Jana nilimtembelea rafiki yangu.":"Yesterday I visited my friend.",
-    "Ilikuwa siku ya kuvutia sana.":"It was a very interesting day.",
-    "Tulila pamoja.":"We ate together.",
-    "Kesho nitasoma.":"Tomorrow I will study.",
-    "Nataka kujifunza Kiswahili zaidi.":"I want to learn more Kiswahili.",
-    "Mwaka ujao nitasafiri.":"Next year I will travel."
+    "Habari.": "Hello.",
+    "Hujambo?": "How are you?",
+    "Jina langu ni Amina.": "My name is Amina.",
+    "Unatoka wapi?": "Where are you from?",
+    "Ninatoka Uganda.": "I am from Uganda.",
+    "Unazungumza Kiingereza?": "Do you speak English?",
+    "Ndiyo, ninazungumza Kiingereza kidogo.": "Yes, I speak a little English.",
+    "Asante.": "Thank you.",
+    "Karibu.": "You're welcome.",
+    "Tafadhali.": "Please.",
+    "Nina familia ndogo.": "I have a small family.",
+    "Mama yangu anafanya kazi hospitalini.": "My mother works in a hospital.",
+    "Nina ndugu wawili.": "I have two siblings.",
+    "Ninaenda shuleni kila siku.": "I go to school every day.",
+    "Usiku, nasoma kitabu.": "At night, I read a book.",
+    "Nataka kununua mkate.": "I want to buy bread.",
+    "Nahitaji chupa ya maji.": "I need a bottle of water.",
+    "Kituo kiko wapi?": "Where is the station?",
+    "Nataka kusafiri kesho.": "I want to travel tomorrow.",
+    "Jana nilimtembelea rafiki yangu.": "Yesterday I visited my friend.",
+    "Tulila pamoja.": "We ate together.",
+    "Kesho nitasoma.": "Tomorrow I will study.",
+    "Nataka kujifunza Kiswahili zaidi.": "I want to learn more Kiswahili."
   },
 
+  /* =========================
+     GERMAN
+     ========================= */
   de: {
-    "Hallo.":"Hello.",
-    "Guten Morgen.":"Good morning.",
-    "Guten Abend.":"Good evening.",
-    "Wie geht es dir?":"How are you?",
-    "Ich heiße Anna.":"My name is Anna.",
-    "Woher kommst du?":"Where are you from?",
-    "Ich komme aus Uganda.":"I come from Uganda.",
-    "Sprichst du Englisch?":"Do you speak English?",
-    "Ja, ich spreche ein bisschen Englisch.":"Yes, I speak a little English.",
-    "Danke.":"Thank you.",
-    "Bitte.":"You're welcome.",
-    "Ich habe eine kleine Familie.":"I have a small family.",
-    "Meine Mutter arbeitet in einem Krankenhaus.":"My mother works in a hospital.",
-    "Ich habe zwei Geschwister.":"I have two siblings.",
-    "Ich stehe um sechs Uhr auf.":"I get up at six.",
-    "Ich gehe jeden Tag zur Schule.":"I go to school every day.",
-    "Abends lese ich ein Buch.":"In the evening, I read a book.",
-    "Ich möchte Brot kaufen.":"I want to buy bread.",
-    "Wie viel kostet das?":"How much does that cost?",
-    "Ich brauche eine Flasche Wasser.":"I need a bottle of water.",
-    "Wo ist der Bahnhof?":"Where is the station?",
-    "Ich möchte morgen reisen.":"I want to travel tomorrow.",
-    "Wann fährt der Bus ab?":"When does the bus leave?",
-    "Gestern habe ich meinen Freund besucht.":"Yesterday I visited my friend.",
-    "Es war ein sehr interessanter Tag.":"It was a very interesting day.",
-    "Wir haben zusammen gegessen.":"We ate together.",
-    "Morgen werde ich lernen.":"Tomorrow I will study.",
-    "Ich möchte mehr Deutsch lernen.":"I want to learn more German.",
-    "Nächstes Jahr werde ich reisen.":"Next year I will travel."
+    "Hallo.": "Hello.",
+    "Guten Morgen.": "Good morning.",
+    "Guten Abend.": "Good evening.",
+    "Wie geht es dir?": "How are you?",
+    "Ich heiße Anna.": "My name is Anna.",
+    "Woher kommst du?": "Where are you from?",
+    "Ich komme aus Uganda.": "I come from Uganda.",
+    "Sprichst du Englisch?": "Do you speak English?",
+    "Ja, ich spreche ein bisschen Englisch.": "Yes, I speak a little English.",
+    "Danke.": "Thank you.",
+    "Bitte.": "You're welcome.",
+    "Ich habe eine kleine Familie.": "I have a small family.",
+    "Meine Mutter arbeitet in einem Krankenhaus.": "My mother works in a hospital.",
+    "Ich habe zwei Geschwister.": "I have two siblings.",
+    "Ich stehe um sechs Uhr auf.": "I get up at six.",
+    "Ich gehe jeden Tag zur Schule.": "I go to school every day.",
+    "Abends lese ich ein Buch.": "In the evening, I read a book.",
+    "Ich möchte Brot kaufen.": "I want to buy bread.",
+    "Wie viel kostet das?": "How much does that cost?",
+    "Ich brauche eine Flasche Wasser.": "I need a bottle of water.",
+    "Wo ist der Bahnhof?": "Where is the station?",
+    "Ich möchte morgen reisen.": "I want to travel tomorrow.",
+    "Wann fährt der Bus ab?": "When does the bus leave?",
+    "Gestern habe ich meinen Freund besucht.": "Yesterday I visited my friend.",
+    "Es war ein sehr interessanter Tag.": "It was a very interesting day.",
+    "Wir haben zusammen gegessen.": "We ate together.",
+    "Morgen werde ich lernen.": "Tomorrow I will study.",
+    "Ich möchte mehr Deutsch lernen.": "I want to learn more German.",
+    "Nächstes Jahr werde ich reisen.": "Next year I will travel."
   },
 
+  /* =========================
+     ITALIAN
+     ========================= */
   it: {
-    "Ciao.":"Hello.",
-    "Buongiorno.":"Good morning.",
-    "Buonasera.":"Good evening.",
-    "Come stai?":"How are you?",
-    "Mi chiamo Marco.":"My name is Marco.",
-    "Di dove sei?":"Where are you from?",
-    "Vengo dall'Uganda.":"I come from Uganda.",
-    "Parli inglese?":"Do you speak English?",
-    "Sì, parlo un po' d'inglese.":"Yes, I speak a little English.",
-    "Grazie.":"Thank you.",
-    "Prego.":"You're welcome.",
-    "Per favore.":"Please.",
-    "Ho una famiglia piccola.":"I have a small family.",
-    "Mia madre lavora in un ospedale.":"My mother works in a hospital.",
-    "Ho due fratelli.":"I have two brothers.",
-    "Mi alzo alle sei.":"I get up at six.",
-    "Vado a scuola ogni giorno.":"I go to school every day.",
-    "La sera leggo un libro.":"In the evening, I read a book.",
-    "Voglio comprare il pane.":"I want to buy bread.",
-    "Quanto costa?":"How much does it cost?",
-    "Ho bisogno di una bottiglia d'acqua.":"I need a bottle of water.",
-    "Dov'è la stazione?":"Where is the station?",
-    "Voglio viaggiare domani.":"I want to travel tomorrow.",
-    "A che ora parte l'autobus?":"What time does the bus leave?",
-    "Ieri ho visitato il mio amico.":"Yesterday I visited my friend.",
-    "È stata una giornata molto interessante.":"It was a very interesting day.",
-    "Abbiamo mangiato insieme.":"We ate together.",
-    "Domani studierò.":"Tomorrow I will study.",
-    "Voglio imparare più italiano.":"I want to learn more Italian.",
-    "L'anno prossimo viaggerò.":"Next year I will travel."
+    "Ciao.": "Hello.",
+    "Buongiorno.": "Good morning.",
+    "Buonasera.": "Good evening.",
+    "Come stai?": "How are you?",
+    "Mi chiamo Marco.": "My name is Marco.",
+    "Di dove sei?": "Where are you from?",
+    "Vengo dall'Uganda.": "I come from Uganda.",
+    "Parli inglese?": "Do you speak English?",
+    "Sì, parlo un po' d'inglese.": "Yes, I speak a little English.",
+    "Grazie.": "Thank you.",
+    "Prego.": "You're welcome.",
+    "Per favore.": "Please.",
+    "Ho una famiglia piccola.": "I have a small family.",
+    "Mia madre lavora in un ospedale.": "My mother works in a hospital.",
+    "Ho due fratelli.": "I have two brothers.",
+    "Mi alzo alle sei.": "I get up at six.",
+    "Vado a scuola ogni giorno.": "I go to school every day.",
+    "La sera leggo un libro.": "In the evening, I read a book.",
+    "Voglio comprare il pane.": "I want to buy bread.",
+    "Quanto costa?": "How much does it cost?",
+    "Ho bisogno di una bottiglia d'acqua.": "I need a bottle of water.",
+    "Dov'è la stazione?": "Where is the station?",
+    "Voglio viaggiare domani.": "I want to travel tomorrow.",
+    "A che ora parte l'autobus?": "What time does the bus leave?",
+    "Ieri ho visitato il mio amico.": "Yesterday I visited my friend.",
+    "È stata una giornata molto interessante.": "It was a very interesting day.",
+    "Abbiamo mangiato insieme.": "We ate together.",
+    "Domani studierò.": "Tomorrow I will study.",
+    "Voglio imparare più italiano.": "I want to learn more Italian.",
+    "L'anno prossimo viaggerò.": "Next year I will travel."
   },
 
+  /* =========================
+     PORTUGUESE
+     ========================= */
   pt: {
-    "Olá.":"Hello.",
-    "Bom dia.":"Good morning.",
-    "Boa noite.":"Good evening.",
-    "Como estás?":"How are you?",
-    "Chamo-me Ana.":"My name is Ana.",
-    "De onde és?":"Where are you from?",
-    "Sou do Uganda.":"I am from Uganda.",
-    "Falas inglês?":"Do you speak English?",
-    "Sim, falo um pouco de inglês.":"Yes, I speak a little English.",
-    "Obrigado.":"Thank you.",
-    "De nada.":"You're welcome.",
-    "Por favor.":"Please.",
-    "Tenho uma família pequena.":"I have a small family.",
-    "A minha mãe trabalha num hospital.":"My mother works in a hospital.",
-    "Tenho dois irmãos.":"I have two brothers.",
-    "Levanto-me às seis.":"I get up at six.",
-    "Vou à escola todos os dias.":"I go to school every day.",
-    "À noite, leio um livro.":"At night, I read a book.",
-    "Quero comprar pão.":"I want to buy bread.",
-    "Quanto custa isto?":"How much does this cost?",
-    "Preciso de uma garrafa de água.":"I need a bottle of water.",
-    "Onde fica a estação?":"Where is the station?",
-    "Quero viajar amanhã.":"I want to travel tomorrow.",
-    "A que horas parte o autocarro?":"What time does the bus leave?",
-    "Ontem visitei o meu amigo.":"Yesterday I visited my friend.",
-    "Foi um dia muito interessante.":"It was a very interesting day.",
-    "Comemos juntos.":"We ate together.",
-    "Amanhã vou estudar.":"Tomorrow I am going to study.",
-    "Quero aprender mais português.":"I want to learn more Portuguese.",
-    "No próximo ano vou viajar.":"Next year I am going to travel."
+    "Olá.": "Hello.",
+    "Bom dia.": "Good morning.",
+    "Boa noite.": "Good evening.",
+    "Como estás?": "How are you?",
+    "Chamo-me Ana.": "My name is Ana.",
+    "De onde és?": "Where are you from?",
+    "Sou do Uganda.": "I am from Uganda.",
+    "Falas inglês?": "Do you speak English?",
+    "Sim, falo um pouco de inglês.": "Yes, I speak a little English.",
+    "Obrigado.": "Thank you.",
+    "De nada.": "You're welcome.",
+    "Por favor.": "Please.",
+    "Tenho uma família pequena.": "I have a small family.",
+    "A minha mãe trabalha num hospital.": "My mother works in a hospital.",
+    "Tenho dois irmãos.": "I have two siblings.",
+    "Levanto-me às seis.": "I get up at six.",
+    "Vou à escola todos os dias.": "I go to school every day.",
+    "À noite, leio um livro.": "At night, I read a book.",
+    "Quero comprar pão.": "I want to buy bread.",
+    "Quanto custa isto?": "How much does this cost?",
+    "Preciso de uma garrafa de água.": "I need a bottle of water.",
+    "Onde fica a estação?": "Where is the station?",
+    "Quero viajar amanhã.": "I want to travel tomorrow.",
+    "A que horas parte o autocarro?": "What time does the bus leave?",
+    "Ontem visitei o meu amigo.": "Yesterday I visited my friend.",
+    "Foi um dia muito interessante.": "It was a very interesting day.",
+    "Comemos juntos.": "We ate together.",
+    "Amanhã vou estudar.": "Tomorrow I am going to study.",
+    "Quero aprender mais português.": "I want to learn more Portuguese.",
+    "No próximo ano vou viajar.": "Next year I am going to travel."
   },
 
+  /* =========================
+     ARABIC
+     ========================= */
   ar: {
-    "مرحباً.":"Hello.",
-    "صباح الخير.":"Good morning.",
-    "مساء الخير.":"Good evening.",
-    "كيف حالك؟":"How are you?",
-    "اسمي أحمد.":"My name is Ahmed.",
-    "من أين أنت؟":"Where are you from?",
-    "أنا من أوغندا.":"I am from Uganda.",
-    "هل تتحدث الإنجليزية؟":"Do you speak English?",
-    "نعم، أتحدث الإنجليزية قليلاً.":"Yes, I speak a little English.",
-    "شكراً.":"Thank you.",
-    "عفواً.":"You're welcome.",
-    "من فضلك.":"Please.",
-    "لدي عائلة صغيرة.":"I have a small family.",
-    "أمي تعمل في مستشفى.":"My mother works in a hospital.",
-    "لدي أخوان.":"I have two brothers.",
-    "أستيقظ في الساعة السادسة.":"I wake up at six.",
-    "أذهب إلى المدرسة كل يوم.":"I go to school every day.",
-    "في المساء أقرأ كتاباً.":"In the evening, I read a book.",
-    "أريد شراء الخبز.":"I want to buy bread.",
-    "كم سعر هذا؟":"How much does this cost?",
-    "أحتاج إلى زجاجة ماء.":"I need a bottle of water.",
-    "أين المحطة؟":"Where is the station?",
-    "أريد السفر غداً.":"I want to travel tomorrow.",
-    "متى تغادر الحافلة؟":"When does the bus leave?",
-    "زرت صديقي أمس.":"I visited my friend yesterday.",
-    "كان يوماً ممتعاً جداً.":"It was a very interesting day.",
-    "أكلنا معاً.":"We ate together.",
-    "سأدرس غداً.":"I will study tomorrow.",
-    "أريد أن أتعلم المزيد من العربية.":"I want to learn more Arabic.",
-    "سأسافر العام المقبل.":"I will travel next year."
+    "مرحباً.": "Hello.",
+    "صباح الخير.": "Good morning.",
+    "مساء الخير.": "Good evening.",
+    "كيف حالك؟": "How are you?",
+    "اسمي أحمد.": "My name is Ahmed.",
+    "من أين أنت؟": "Where are you from?",
+    "أنا من أوغندا.": "I am from Uganda.",
+    "هل تتحدث الإنجليزية؟": "Do you speak English?",
+    "نعم، أتحدث الإنجليزية قليلاً.": "Yes, I speak a little English.",
+    "شكراً.": "Thank you.",
+    "عفواً.": "You're welcome.",
+    "من فضلك.": "Please.",
+    "لدي عائلة صغيرة.": "I have a small family.",
+    "أمي تعمل في مستشفى.": "My mother works in a hospital.",
+    "لدي أخوان.": "I have two brothers.",
+    "أستيقظ في الساعة السادسة.": "I wake up at six.",
+    "أذهب إلى المدرسة كل يوم.": "I go to school every day.",
+    "في المساء أقرأ كتاباً.": "In the evening, I read a book.",
+    "أريد شراء الخبز.": "I want to buy bread.",
+    "كم سعر هذا؟": "How much does this cost?",
+    "أحتاج إلى زجاجة ماء.": "I need a bottle of water.",
+    "أين المحطة؟": "Where is the station?",
+    "أريد السفر غداً.": "I want to travel tomorrow.",
+    "متى تغادر الحافلة؟": "When does the bus leave?",
+    "زرت صديقي أمس.": "I visited my friend yesterday.",
+    "أكلنا معاً.": "We ate together.",
+    "سأدرس غداً.": "I will study tomorrow."
   },
 
+  /* =========================
+     HINDI
+     ========================= */
   hi: {
-    "नमस्ते।":"Hello.",
-    "सुप्रभात।":"Good morning.",
-    "शुभ संध्या।":"Good evening.",
-    "आप कैसे हैं?":"How are you?",
-    "मेरा नाम अजय है।":"My name is Ajay.",
-    "आप कहाँ से हैं?":"Where are you from?",
-    "मैं युगांडा से हूँ।":"I am from Uganda.",
-    "क्या आप अंग्रेज़ी बोलते हैं?":"Do you speak English?",
-    "हाँ, मैं थोड़ी अंग्रेज़ी बोलता हूँ।":"Yes, I speak a little English.",
-    "धन्यवाद।":"Thank you.",
-    "कोई बात नहीं।":"You're welcome.",
-    "कृपया।":"Please.",
-    "मेरा एक छोटा परिवार है।":"I have a small family.",
-    "मेरी माँ अस्पताल में काम करती हैं।":"My mother works in a hospital.",
-    "मेरे दो भाई हैं।":"I have two brothers.",
-    "मैं छह बजे उठता हूँ।":"I get up at six.",
-    "मैं हर दिन स्कूल जाता हूँ।":"I go to school every day.",
-    "रात में मैं किताब पढ़ता हूँ।":"At night, I read a book.",
-    "मैं रोटी खरीदना चाहता हूँ।":"I want to buy bread.",
-    "यह कितने का है?":"How much does this cost?",
-    "मुझे पानी की एक बोतल चाहिए।":"I need a bottle of water.",
-    "स्टेशन कहाँ है?":"Where is the station?",
-    "मैं कल यात्रा करना चाहता हूँ।":"I want to travel tomorrow.",
-    "बस कितने बजे जाती है?":"What time does the bus leave?",
-    "कल मैं अपने दोस्त से मिला।":"Yesterday I met my friend.",
-    "यह बहुत दिलचस्प दिन था।":"It was a very interesting day.",
-    "हमने साथ में खाना खाया।":"We ate together.",
-    "मैं कल पढ़ाई करूँगा।":"I will study tomorrow.",
-    "मैं और हिंदी सीखना चाहता हूँ।":"I want to learn more Hindi.",
-    "अगले साल मैं यात्रा करूँगा।":"Next year I will travel."
+    "नमस्ते।": "Hello.",
+    "सुप्रभात।": "Good morning.",
+    "शुभ संध्या।": "Good evening.",
+    "आप कैसे हैं?": "How are you?",
+    "मेरा नाम अजय है।": "My name is Ajay.",
+    "आप कहाँ से हैं?": "Where are you from?",
+    "मैं युगांडा से हूँ।": "I am from Uganda.",
+    "क्या आप अंग्रेज़ी बोलते हैं?": "Do you speak English?",
+    "हाँ, मैं थोड़ी अंग्रेज़ी बोलता हूँ।": "Yes, I speak a little English.",
+    "धन्यवाद।": "Thank you.",
+    "कोई बात नहीं।": "You're welcome.",
+    "कृपया।": "Please.",
+    "मेरा एक छोटा परिवार है।": "I have a small family.",
+    "मेरी माँ अस्पताल में काम करती हैं।": "My mother works in a hospital.",
+    "मेरे दो भाई हैं।": "I have two brothers.",
+    "मैं छह बजे उठता हूँ।": "I get up at six.",
+    "मैं हर दिन स्कूल जाता हूँ।": "I go to school every day.",
+    "रात में मैं किताब पढ़ता हूँ।": "At night, I read a book.",
+    "मैं रोटी खरीदना चाहता हूँ।": "I want to buy bread.",
+    "यह कितने का है?": "How much does this cost?",
+    "मुझे पानी की एक बोतल चाहिए।": "I need a bottle of water.",
+    "स्टेशन कहाँ है?": "Where is the station?",
+    "मैं कल यात्रा करना चाहता हूँ।": "I want to travel tomorrow.",
+    "बस कितने बजे जाती है?": "What time does the bus leave?",
+    "कल मैं अपने दोस्त से मिला।": "Yesterday I met my friend.",
+    "हमने साथ में खाना खाया।": "We ate together.",
+    "मैं कल पढ़ाई करूँगा।": "I will study tomorrow."
   },
 
+  /* =========================
+     MANDARIN CHINESE
+     ========================= */
   zh: {
-    "你好。":"Hello.",
-    "早上好。":"Good morning.",
-    "晚上好。":"Good evening.",
-    "你好吗？":"How are you?",
-    "我叫小明。":"My name is Xiaoming.",
-    "你来自哪里？":"Where are you from?",
-    "我来自乌干达。":"I am from Uganda.",
-    "你会说英语吗？":"Do you speak English?",
-    "我会说一点英语。":"I speak a little English.",
-    "谢谢。":"Thank you.",
-    "不客气。":"You're welcome.",
-    "请。":"Please.",
-    "我有一个小家庭。":"I have a small family.",
-    "我妈妈在医院工作。":"My mother works in a hospital.",
-    "我有两个兄弟。":"I have two brothers.",
-    "我六点起床。":"I get up at six.",
-    "我每天去学校。":"I go to school every day.",
-    "晚上我读书。":"At night, I read a book.",
-    "我想买面包。":"I want to buy bread.",
-    "这个多少钱？":"How much does this cost?",
-    "我需要一瓶水。":"I need a bottle of water.",
-    "车站在哪里？":"Where is the station?",
-    "我明天想旅行。":"I want to travel tomorrow.",
-    "公共汽车几点出发？":"What time does the bus leave?",
-    "昨天我拜访了我的朋友。":"Yesterday I visited my friend.",
-    "那是非常有趣的一天。":"It was a very interesting day.",
-    "我们一起吃饭。":"We ate together.",
-    "我明天要学习。":"I will study tomorrow.",
-    "我想学习更多中文。":"I want to learn more Chinese.",
-    "明年我会去旅行。":"Next year I will travel."
+    "你好。": "Hello.",
+    "早上好。": "Good morning.",
+    "晚上好。": "Good evening.",
+    "你好吗？": "How are you?",
+    "我叫小明。": "My name is Xiaoming.",
+    "你来自哪里？": "Where are you from?",
+    "我来自乌干达。": "I am from Uganda.",
+    "你会说英语吗？": "Do you speak English?",
+    "我会说一点英语。": "I speak a little English.",
+    "谢谢。": "Thank you.",
+    "不客气。": "You're welcome.",
+    "请。": "Please.",
+    "我有一个小家庭。": "I have a small family.",
+    "我妈妈在医院工作。": "My mother works in a hospital.",
+    "我有两个兄弟。": "I have two brothers.",
+    "我六点起床。": "I get up at six.",
+    "我每天去学校。": "I go to school every day.",
+    "晚上我读书。": "At night, I read a book.",
+    "我想买面包。": "I want to buy bread.",
+    "这个多少钱？": "How much does this cost?",
+    "我需要一瓶水。": "I need a bottle of water.",
+    "车站在哪里？": "Where is the station?",
+    "我明天想旅行。": "I want to travel tomorrow.",
+    "公共汽车几点出发？": "What time does the bus leave?",
+    "昨天我拜访了我的朋友。": "Yesterday I visited my friend.",
+    "我们一起吃饭。": "We ate together.",
+    "我明天要学习。": "I will study tomorrow."
   },
 
+  /* =========================
+     JAPANESE
+     ========================= */
   ja: {
-    "こんにちは。":"Hello.",
-    "おはようございます。":"Good morning.",
-    "こんばんは。":"Good evening.",
-    "お元気ですか。":"How are you?",
-    "私はアキラです。":"My name is Akira.",
-    "どこから来ましたか。":"Where are you from?",
-    "ウガンダから来ました。":"I come from Uganda.",
-    "英語を話しますか。":"Do you speak English?",
-    "はい、少し英語を話します。":"Yes, I speak a little English.",
-    "ありがとうございます。":"Thank you.",
-    "どういたしまして。":"You're welcome.",
-    "お願いします。":"Please.",
-    "私は小さな家族がいます。":"I have a small family.",
-    "母は病院で働いています。":"My mother works in a hospital.",
-    "兄弟が二人います。":"I have two siblings.",
-    "六時に起きます。":"I get up at six.",
-    "毎日学校へ行きます。":"I go to school every day.",
-    "夜、本を読みます。":"At night, I read a book.",
-    "パンを買いたいです。":"I want to buy bread.",
-    "これはいくらですか。":"How much does this cost?",
-    "水を一本ください。":"I need a bottle of water.",
-    "駅はどこですか。":"Where is the station?",
-    "明日旅行したいです。":"I want to travel tomorrow.",
-    "バスは何時に出ますか。":"What time does the bus leave?",
-    "昨日、友達を訪ねました。":"Yesterday I visited my friend.",
-    "とても面白い一日でした。":"It was a very interesting day.",
-    "一緒に食事をしました。":"We ate together.",
-    "明日勉強します。":"I will study tomorrow.",
-    "もっと日本語を学びたいです。":"I want to learn more Japanese.",
-    "来年旅行します。":"I will travel next year."
+    "こんにちは。": "Hello.",
+    "おはようございます。": "Good morning.",
+    "こんばんは。": "Good evening.",
+    "お元気ですか。": "How are you?",
+    "私はアキラです。": "My name is Akira.",
+    "どこから来ましたか。": "Where are you from?",
+    "ウガンダから来ました。": "I come from Uganda.",
+    "英語を話しますか。": "Do you speak English?",
+    "はい、少し英語を話します。": "Yes, I speak a little English.",
+    "ありがとうございます。": "Thank you.",
+    "どういたしまして。": "You're welcome.",
+    "お願いします。": "Please.",
+    "私は小さな家族がいます。": "I have a small family.",
+    "母は病院で働いています。": "My mother works in a hospital.",
+    "兄弟が二人います。": "I have two siblings.",
+    "六時に起きます。": "I get up at six.",
+    "毎日学校へ行きます。": "I go to school every day.",
+    "夜、本を読みます。": "At night, I read a book.",
+    "パンを買いたいです。": "I want to buy bread.",
+    "これはいくらですか。": "How much does this cost?",
+    "水を一本ください。": "I need a bottle of water.",
+    "駅はどこですか。": "Where is the station?",
+    "明日旅行したいです。": "I want to travel tomorrow.",
+    "バスは何時に出ますか。": "What time does the bus leave?",
+    "昨日、友達を訪ねました。": "Yesterday I visited my friend.",
+    "とても面白い一日でした。": "It was a very interesting day.",
+    "一緒に食事をしました。": "We ate together.",
+    "明日勉強します。": "I will study tomorrow.",
+    "もっと日本語を学びたいです。": "I want to learn more Japanese.",
+    "来年旅行します。": "Next year I will travel."
   },
 
+  /* =========================
+     KOREAN
+     ========================= */
   ko: {
-    "안녕하세요.":"Hello.",
-    "좋은 아침입니다.":"Good morning.",
-    "안녕히 주무세요.":"Good night.",
-    "어떻게 지내세요?":"How are you?",
-    "제 이름은 민수입니다.":"My name is Minsu.",
-    "어디에서 왔어요?":"Where are you from?",
-    "우간다에서 왔어요.":"I am from Uganda.",
-    "영어를 할 수 있어요?":"Do you speak English?",
-    "네, 영어를 조금 할 수 있어요.":"Yes, I speak a little English.",
-    "감사합니다.":"Thank you.",
-    "천만에요.":"You're welcome.",
-    "부탁합니다.":"Please.",
-    "저는 작은 가족이 있어요.":"I have a small family.",
-    "어머니는 병원에서 일하세요.":"My mother works in a hospital.",
-    "형제가 두 명 있어요.":"I have two siblings.",
-    "여섯 시에 일어나요.":"I get up at six.",
-    "매일 학교에 가요.":"I go to school every day.",
-    "밤에 책을 읽어요.":"At night, I read a book.",
-    "빵을 사고 싶어요.":"I want to buy bread.",
-    "이것은 얼마예요?":"How much does this cost?",
-    "물 한 병이 필요해요.":"I need a bottle of water.",
-    "역이 어디예요?":"Where is the station?",
-    "내일 여행하고 싶어요.":"I want to travel tomorrow.",
-    "버스는 몇 시에 출발해요?":"What time does the bus leave?",
-    "어제 친구를 만났어요.":"Yesterday I met my friend.",
-    "정말 재미있는 하루였어요.":"It was a very interesting day.",
-    "우리는 함께 먹었어요.":"We ate together.",
-    "내일 공부할 거예요.":"I will study tomorrow.",
-    "한국어를 더 배우고 싶어요.":"I want to learn more Korean.",
-    "내년에 여행할 거예요.":"I will travel next year."
+    "안녕하세요.": "Hello.",
+    "좋은 아침입니다.": "Good morning.",
+    "안녕히 주무세요.": "Good night.",
+    "어떻게 지내세요?": "How are you?",
+    "제 이름은 민수입니다.": "My name is Minsu.",
+    "어디에서 왔어요?": "Where are you from?",
+    "우간다에서 왔어요.": "I am from Uganda.",
+    "영어를 할 수 있어요?": "Do you speak English?",
+    "네, 영어를 조금 할 수 있어요.": "Yes, I speak a little English.",
+    "감사합니다.": "Thank you.",
+    "천만에요.": "You're welcome.",
+    "부탁합니다.": "Please.",
+    "저는 작은 가족이 있어요.": "I have a small family.",
+    "어머니는 병원에서 일하세요.": "My mother works in a hospital.",
+    "형제가 두 명 있어요.": "I have two siblings.",
+    "여섯 시에 일어나요.": "I get up at six.",
+    "매일 학교에 가요.": "I go to school every day.",
+    "밤에 책을 읽어요.": "At night, I read a book.",
+    "빵을 사고 싶어요.": "I want to buy bread.",
+    "이것은 얼마예요?": "How much does this cost?",
+    "물 한 병이 필요해요.": "I need a bottle of water.",
+    "역이 어디예요?": "Where is the station?",
+    "내일 여행하고 싶어요.": "I want to travel tomorrow.",
+    "버스는 몇 시에 출발해요?": "What time does the bus leave?",
+    "어제 친구를 만났어요.": "Yesterday I met a friend.",
+    "정말 재미있는 하루였어요.": "It was a very interesting day.",
+    "우리는 함께 먹었어요.": "We ate together.",
+    "내일 공부할 거예요.": "I will study tomorrow.",
+    "한국어를 더 배우고 싶어요.": "I want to learn more Korean.",
+    "내년에 여행할 거예요.": "I will travel next year."
   },
 
+  /* African languages will be filled from the
+     exact phrases in your COURSES data. */
   lg: {},
   ach: {},
   luo: {},
@@ -1493,25 +1513,76 @@ const ENGLISH_TRANSLATIONS = {
    TRANSLATION HELPERS
    ========================================================= */
 
-function getEnglishTranslation(lang, phrase){
-  if(!phrase) return '';
-
-  // Allows us to support both the current string format
-  // and a future {text,en} lesson format.
-  if(typeof phrase === 'object'){
-    return phrase.en || '';
-  }
-
-  return ENGLISH_TRANSLATIONS[lang]?.[phrase] || '';
-}
-
 function getLessonText(phrase){
   if(typeof phrase === 'object'){
     return phrase.text || '';
   }
 
-  return phrase;
+  return String(phrase || '');
 }
+
+function getEnglishTranslation(lang, phrase){
+
+  if(typeof phrase === 'object'){
+    return phrase.en || '';
+  }
+
+  const text = getLessonText(phrase);
+
+  return ENGLISH_TRANSLATIONS[lang]?.[text] || '';
+}
+
+
+/* =========================================================
+   REVERSE TRANSLATION QUESTION
+   ========================================================= */
+
+function createReverseTranslationQuestion(
+  lang=state.lang,
+  level=state.level
+){
+
+  const lessons = allCourseLessons(lang, level);
+
+  if(!lessons.length){
+    return null;
+  }
+
+  const available = [];
+
+  lessons.forEach(unit => {
+
+    const phrases = unit[1] || [];
+
+    phrases.forEach(phrase => {
+
+      const text = getLessonText(phrase);
+      const english = getEnglishTranslation(lang, phrase);
+
+      if(text && english){
+
+        available.push({
+          text,
+          english,
+          lang,
+          level
+        });
+
+      }
+
+    });
+
+  });
+
+  if(!available.length){
+    return null;
+  }
+
+  return available[
+    Math.floor(Math.random() * available.length)
+  ];
+} 
+  
 const $=id=>document.getElementById(id), key='lingua_full_v4';
 const fresh={lang:'es',level:'A1',xp:0,streak:0,lastStudy:'',todayMinutes:0,totalMinutes:0,goal:15,lessonProgress:{},vocab:{},activity:[],theme:'light',speakIndex:0};
 let state=load(), lastTranslation='', recognition=null, deferredInstall=null;
