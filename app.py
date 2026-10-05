@@ -6,8 +6,20 @@ from openai import OpenAI
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
-app = Flask(__name__, static_folder=".", static_url_path="")
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) if os.getenv("OPENAI_API_KEY") else None
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(
+    __name__,
+    static_folder=BASE_DIR,
+    static_url_path=""
+)
+
+openai_client = (
+    OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    if os.getenv("OPENAI_API_KEY")
+    else None
+)
+
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
 
 LANGUAGES = {
@@ -735,12 +747,122 @@ def online_translate(text, source, target):
 
 @app.get("/")
 def home():
-    return send_from_directory(".", "index.html")
+    """
+    Serve Lingua's main page.
+
+    Render projects can place index.html either in the project root
+    or inside static/. We check both locations so deployment does
+    not fail simply because the HTML was moved.
+    """
+    possible_locations = [
+        os.path.join(BASE_DIR, "index.html"),
+        os.path.join(BASE_DIR, "static", "index.html"),
+        os.path.join(BASE_DIR, "public", "index.html"),
+    ]
+
+    for index_path in possible_locations:
+        if os.path.isfile(index_path):
+            return send_from_directory(
+                os.path.dirname(index_path),
+                os.path.basename(index_path)
+            )
+
+    return (
+        """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Lingua — Setup Error</title>
+            <style>
+                body {
+                    margin: 0;
+                    min-height: 100vh;
+                    display: grid;
+                    place-items: center;
+                    font-family: system-ui, sans-serif;
+                    background: #f7f8fa;
+                    color: #17202a;
+                }
+
+                main {
+                    max-width: 620px;
+                    padding: 32px;
+                    text-align: center;
+                }
+
+                h1 {
+                    margin-bottom: 10px;
+                }
+
+                p {
+                    color: #667085;
+                    line-height: 1.6;
+                }
+            </style>
+        </head>
+        <body>
+            <main>
+                <h1>Lingua is starting up</h1>
+                <p>
+                    The server is running, but index.html could not be found.
+                    Please check that your Lingua HTML file is named
+                    <strong>index.html</strong>.
+                </p>
+            </main>
+        </body>
+        </html>
+        """,
+        500,
+    )
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return send_from_directory(".", "404.html"), 404
+    """
+    Handle missing pages without allowing the error handler itself
+    to create another 500 error.
+    """
+    possible_locations = [
+        os.path.join(BASE_DIR, "404.html"),
+        os.path.join(BASE_DIR, "static", "404.html"),
+        os.path.join(BASE_DIR, "public", "404.html"),
+    ]
+
+    for error_path in possible_locations:
+        if os.path.isfile(error_path):
+            return send_from_directory(
+                os.path.dirname(error_path),
+                os.path.basename(error_path)
+            ), 404
+
+    return (
+        """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Lingua — Page Not Found</title>
+        </head>
+        <body>
+            <main style="
+                max-width:600px;
+                margin:80px auto;
+                padding:24px;
+                font-family:system-ui,sans-serif;
+                text-align:center;
+            ">
+                <h1>404</h1>
+                <p>The page you requested could not be found.</p>
+                <p><a href="/">Return to Lingua</a></p>
+            </main>
+        </body>
+        </html>
+        """,
+        404,
+    )
 
 
 @app.get("/languages")
